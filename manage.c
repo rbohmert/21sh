@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 16:20:02 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/25 04:16:05 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/26 16:38:48 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		manage_out(int outcom, t_list *out)
 			tmp = out;
 			while (tmp)
 			{
-				ft_putchar_fd(buf[0], (*((int*)(tmp->content))));
+				write((*((int*)(tmp->content))), buf, 1);
 				tmp = tmp->next;
 			}
 		}
@@ -55,7 +55,7 @@ int		manage_in(t_list *in)
 			{
 			//	printf("olol je lis dans %d et fdin = %d\n", (*((int*)(in->content))), fdin);
 				//ft_putchar_fd(buf[0], 1);
-				ft_putstr_fd(buf, pip[1]);
+				write(pip[1], buf, 1);
 			}
 			in = in->next;
 		}

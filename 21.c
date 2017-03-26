@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/02 03:12:56 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/25 05:31:38 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/26 15:41:02 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int main(int ac , char **av, char **env)
 	while (get_next_line(0, &line))// && line)
 	{
 		lst = lexer(ft_strtrim(line));
-	//	ft_putlist(lst);
+		ft_putlist(lst);
 		tre = parser(lst);
-	//	ptree(tre);
+		ptree(tre);
 		res(tre, NULL, NULL);
 		ft_putstr("?>");
 	}

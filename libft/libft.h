@@ -6,7 +6,7 @@
 /*   By: nrandria <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 11:58:11 by nrandria          #+#    #+#             */
-/*   Updated: 2017/03/04 01:04:44 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/26 16:36:12 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ typedef struct		s_list
 typedef struct		s_tree
 {
 	void			*content;
-	void			*rg;
-	void			*lf;
+	struct s_tree	*rg;
+	struct s_tree	*lf;
 }					t_tree;
 
 typedef struct		s_clist

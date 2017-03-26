@@ -6,7 +6,7 @@
 #    By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/27 11:23:48 by rbohmert          #+#    #+#              #
-#    Updated: 2017/03/17 16:25:07 by rbohmert         ###   ########.fr        #
+#    Updated: 2017/03/26 16:42:11 by rbohmert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ all: $(NAME)
 
 $(NAME):
 		make -C libft/
+		make -C libft/ clean
 		$(GCC) $(SRC) $(LIB)
 
 clean:
