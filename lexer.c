@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/01 23:37:35 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/11 01:37:25 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/27 05:47:24 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "21.h"
@@ -58,12 +58,12 @@ char	*redir(char *line, int i, int *adrr_cmp, char *tok)
 		tok[2] = '>';
 		if (line[i + 2] && line[i + 2] == '&')
 			ft_putstr("parse error");
-		tok[3] = 0;
+		ft_strcpy(tok + 3, "\0\0");
 		*adrr_cmp += 2;
 	}
 	else
 	{
-		tok[2] = 0;
+		ft_strcpy(tok + 2, "\0\0\0");
 		(*adrr_cmp)++;
 	}
 	return (tok);
@@ -81,7 +81,7 @@ char	*gettok(char *line, int i, int *adrr_cmp)
 	{
 		tok[0] = c;
 		tok[1] = (line[i + 1] == c ? c : 0);
-		tok[2] = 0;
+		ft_strcpy(tok + 2, "\0\0\0");
 		*adrr_cmp += (line[i + 1] == c) ? 2 : 1;
 	}
 	if (c == ';')

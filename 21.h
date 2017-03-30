@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/02 04:33:53 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/25 04:16:19 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/29 17:31:25 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,10 @@ char 	*lsttostr(t_list *lst);
 char **sg_env(char **env);
 int		manage_in(t_list *in);
 int		manage_out(int outcom, t_list *out);
+char	*lsttostr(t_list *lst);
+int		ft_lstdellast(t_list *lst);
+void	del(t_list **lst);
+char	**sg_env(char **env);
+int		exec_redirection(t_tree *tree, t_list *in, t_list *out);
 
 #endif
