@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 16:20:02 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/29 17:29:05 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/30 18:30:18 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int		manage_out(int outcom, t_list *out)
 		ft_putstr("fin de manage out");
 		exit(0);
 	}
+	close (6);
 	close(outcom);
 	return (0);
 }

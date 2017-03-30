@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:27:38 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/29 17:37:56 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/30 18:51:32 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	redir_outfile(char *name, int flag)
 		ft_putstr("c'est la merde frero");
 	else if (pid == 0)
 	{
+		close(pip[1]);
 		fdfile = open(name, O_WRONLY | O_CREAT | (flag ? O_APPEND : O_TRUNC), 0644);
 		ft_putstr("deb redir out");
 		while (read(pip[0], buf, 1))
