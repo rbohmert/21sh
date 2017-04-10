@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 04:05:37 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/28 16:37:49 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/31 10:55:31 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ char	*lsttostr(t_list *lst)
 		l->next ? len++ : 0;
 		l = l->next;
 	}
-	if (!(str = (char *)malloc(len + 1)))
-		return (NULL);
+	str = ft_strnew(len + 1);
 	l = lst;
 	while (l)
 	{
@@ -80,8 +79,6 @@ int		ft_lstdellast(t_list *lst)
 		lst = lst->next;
 		if (!lst->next)
 		{
-			ft_putstr("->");
-			ft_putnbr(*((int *)(lst->content)));
 			close(*((int *)(lst->content)));
 			free(lst);
 			tmp->next = NULL;

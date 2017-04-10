@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/11 03:39:22 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/29 17:29:28 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/31 10:58:36 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int		exec_separation(t_tree *tree, t_list *in, t_list *out)
 {
 	int ret;
 
-	ret = 0;
 	if (!ft_strcmp(T(tree)->itm, ";"))
 	{
 		res(tree->lf, in, out);
@@ -25,12 +24,12 @@ int		exec_separation(t_tree *tree, t_list *in, t_list *out)
 	}
 	if (!ft_strcmp(T(tree)->itm, "&&"))
 	{
-		if (res(tree->lf, in, out))
+		if (ret = res(tree->lf, in, out))
 			ret = res(tree->rg, in, out);
 	}
 	if (!ft_strcmp(T(tree)->itm, "||"))
 	{
-		if (!res(tree->lf, in, out))
+		if (!(ret = res(tree->lf, in, out)))
 			ret = res(tree->rg, in, out);
 	}
 	if (!ft_strcmp(T(tree)->itm, "&"))
@@ -50,17 +49,10 @@ int exec_pipe(t_tree *tree, t_list *in, t_list *out)
 	ret = 0;
 	if (pipe(pip) == -1)
 		ft_putstr("pipeeerrroror");
-	ft_putendl("&&&&&&&pipe du pipe&&&&&&&&&&");
-	ft_putnbr(pip[0]);
-	ft_putchar (' ');
-	ft_putnbr(pip[1]);
-	ft_putchar ('\n');
-	ft_putendl("&&&&&&&&&&&&&&&&&");
 	ft_push_back(&out, &pip[1], 0);
 	ret = res(tree->lf, in, out);
 	del(&in);
 	del(&out);
-	ft_putnbr(pip[1]);
 	close(pip[1]);
 	ft_push_back(&in, &pip[0], 0);
 	ret = res(tree->rg, in, out);
@@ -81,24 +73,12 @@ int		exec_command(t_tree *tree, t_list *in, t_list *out)
 	{
 		intocom = manage_in(in);
 		pipe(pip);
-	ft_putendl("&&&&&&&pipe du exec OI&&&&&&&&&&");
-	ft_putnbr(pip[0]);
-	ft_putchar (' ');
-	ft_putnbr(pip[1]);
-	ft_putchar ('\n');
-	ft_putendl("&&&&&&&&&&&&&&&&&");
 		ret = verif_line(str, sg_env(NULL), intocom, pip[1]);
 		manage_out(pip[0], out);
 	}
 	else if (out && !in)
 	{
 		pipe(pip);
-	ft_putendl("&&&&&&&pipe du exec O&&&&&&&&&&");
-	ft_putnbr(pip[0]);
-	ft_putchar (' ');
-	ft_putnbr(pip[1]);
-	ft_putchar ('\n');
-	ft_putendl("&&&&&&&&&&&&&&&&&");
 		ret = verif_line(str, sg_env(NULL), STDIN_FILENO, pip[1]);
 		manage_out(pip[0], out);
 	}

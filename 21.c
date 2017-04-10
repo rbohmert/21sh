@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/02 03:12:56 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/27 19:38:11 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/03/31 11:00:32 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	ptree(t_tree *tre)
 void affiche(t_tree *a, int profondeur)
 {
 	if (a == NULL) return;
-	for (int i = 0; i <= profondeur; i++)
-		printf("|");
+//	for (int i = 0; i <= profondeur; i++)
+//		printf("|");
 	if (a == NULL)
 	{
 		ft_putstr("rieeeeeeeeeeeeeeen");
@@ -85,10 +85,12 @@ int main(int ac , char **av, char **env)
 	line = NULL;
 	while (get_next_line(0, &line))// && line)
 	{
+	//	ft_putendl(line);
 		lst = lexer(ft_strtrim(line));
-		ft_putlist(lst);
+		free(line);
+	//	ft_putlist(lst);
 		tre = parser(lst);
-		ptree(tre);
+//		ptree(tre);
 	//	affiche(tre, 0);
 	//	getchar();
 		res(tre, NULL, NULL);

@@ -16,13 +16,8 @@ char	*ft_strnew(size_t size)
 {
 	char	*ptr;
 
-	ptr = (char *)malloc(sizeof(char) * size + 1);
-	if (ptr == NULL)
+	if (!(ptr = (char *)malloc(sizeof(char) * size)))
 		return (NULL);
-	else
-	{
-		ft_strclr(ptr);
-		*ptr = '\0';
-	}
+	bzero(ptr, size);
 	return (ptr);
 }
