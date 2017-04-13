@@ -23,8 +23,6 @@ char *addretline(char *str)
 	return(new);
 }
 
-	
-
 int heredoc(char *endword)
 {
 	int pid;
@@ -130,5 +128,3 @@ int exec_redirection(t_tree *tree, t_list *in, t_list *out)
 	}
 	return (1);
 }
-
-
