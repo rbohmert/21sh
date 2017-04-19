@@ -38,7 +38,7 @@ void	del(t_sh *sh)
 
 //insere un char dans line en memoire, reecrit le bout de ligne et 
 //avance le curseur 
-void	write_char(char buf[6], t_sh *sh)
+void	write_char(char buf[10], t_sh *sh)
 {
 	char *new;
 
@@ -58,7 +58,7 @@ void	write_char(char buf[6], t_sh *sh)
 
 }
 //place le curseur une ligne au dessus ou en dessous, si possible
-void go_up_down(char buf[6], t_sh *sh)
+void go_up_down(char buf[10], t_sh *sh)
 {
 	if ((USHFARR(buf) && sh->curs - sh->win.ws_col < 0) || (DSHFARR(buf) && sh->curs + sh->win.ws_col > sh->lenline))
 		return ;
@@ -68,7 +68,7 @@ void go_up_down(char buf[6], t_sh *sh)
 		sh->curs = sh->curs + sh->win.ws_col;
 }
 //va au mot precedent ou suivant si possible
-void go_np_word(char buf[6], t_sh *sh)
+void go_np_word(char buf[10], t_sh *sh)
 {
 	int i = sh->curs;
 	

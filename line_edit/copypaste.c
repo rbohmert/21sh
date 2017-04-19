@@ -2,7 +2,7 @@
 
 //surligne suvant fleche gauche ou droite et bouge le curs en fonction et set 
 //le curscc si il est pas mis
-void	shift_arrow(char buf[6], t_sh *sh)
+void	shift_arrow(char buf[10], t_sh *sh)
 {
 	if ((LSHFARR(buf) && sh->curs == 0) || (RSHFARR(buf) && sh->curs == sh->lenline))
 		return ;

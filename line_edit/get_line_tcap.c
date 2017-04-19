@@ -18,11 +18,11 @@ void	init_sh(t_sh *sh)
 char *get_line_tcap(void)
 {
 	t_sh sh;
-	char buf[6];//plus grosse touche de 6
+	char buf[10];
 
 	init_sh(&sh);
-	bzero(buf, 6);
-	while (read(0, buf, 6))
+	bzero(buf, 10);
+	while (read(0, buf, 10))
 	{
 		if (!strcmp(buf, "\n"))
 		{
@@ -30,7 +30,7 @@ char *get_line_tcap(void)
 			return(sh.line);
 		}
 		app_key(buf, &sh);
-		bzero(buf, 6);
+		bzero(buf, 10);
 	}
 	return (NULL);
 }	

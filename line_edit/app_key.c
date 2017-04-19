@@ -2,7 +2,7 @@
 
 //redirige selon la touche, annule le surlignage et les truc de copipaste si
 //c'est pas un shift+fleche
-void	app_key(char buf[6], t_sh *sh)
+void	app_key(char buf[10], t_sh *sh)
 {
 	if (ISCCARR(buf))
 		shift_arrow(buf, sh);
@@ -28,7 +28,7 @@ void	app_key(char buf[6], t_sh *sh)
 	curs_pos(sh);
 }
 //ici buf[0] = 1 -> ctrl-a ; buf[0]=2 ->ctrl-b...
-void	ctrl(char buf[6], t_sh *sh)
+void	ctrl(char buf[10], t_sh *sh)
 {
 	if (buf[0] == 1)
 		sh->curs = 0;
@@ -38,7 +38,7 @@ void	ctrl(char buf[6], t_sh *sh)
 		paste(sh);
 }
 //les fleche + debut et fin + suppr
-void	arrow(char buf[6], t_sh *sh)
+void	arrow(char buf[10], t_sh *sh)
 {
 	if (RARROW(buf))
 		sh->curs == (sh->lenline) ? 0 : sh->curs++;
