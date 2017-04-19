@@ -17,17 +17,19 @@ NAME =	21
 LIB =	libft/libft.a
 
 SRC =	minishell/minishell.c minishell/builtins.c minishell/utils.c\
-		minishell/env.c minishell/setenv.c 21.c lexer.c parser.c resolve.c\
-		manage.c utils.c exec_redir.c\
+		minishell/env.c minishell/setenv.c 21.c line_edit/get_line_tcap.c\
+		line_edit/app_key.c line_edit/utils.c line_edit/term_sig.c\
+		line_edit/copypaste.c line_edit/key_actions.c\
+		lexer.c parser.c resolve.c manage.c utils.c exec_redir.c\
 
-GCC =	gcc -g -o $(NAME) -I/usr/include/
+GCC =	gcc -W -Wall -Werror -g -o $(NAME) -I/usr/include/
 
 all: $(NAME)
 
 $(NAME):
 		make -C libft/
 		make -C libft/ clean
-		$(GCC) $(SRC) $(LIB)
+		$(GCC) $(SRC) $(LIB) -ltermcap
 
 clean:
 	make -C libft/ clean

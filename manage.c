@@ -10,19 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21.h"
+#include "includes/21.h"
 
-void put(t_list *l)
-{
-	while (l)
-	{
-		ft_putnbr(*((int *)(l->content)));
-		ft_putchar('\n');
-		l=l->next;
-	}
-}
-
-int		manage_out(int outcom, t_list *out)
+//attend sur le fd donné (lecture du pipe) et reecrit dans tout les fd de out
+int		manage_out(int outcom, t_list *out, t_list *toclose)
 {
 	t_list *tmp;
 	char buf[2];
@@ -33,12 +24,13 @@ int		manage_out(int outcom, t_list *out)
 		ft_putstr("forkerror");
 	else if (pid == 0)
 	{
+		multiclose(toclose);
 		while ((ret = read(outcom, buf, 1)))
 		{
 			tmp = out;
 			while (tmp)
 			{
-				write((*((int*)(tmp->content))), buf, 1);
+				write(tmp->content_size, buf, 1);
 				tmp = tmp->next;
 			}
 		}
@@ -48,7 +40,8 @@ int		manage_out(int outcom, t_list *out)
 	return (0);
 }
 
-int		manage_in(t_list *in)
+//attend tour a tour sur tout les fd de in et reecrit dans le pipe
+int		manage_in(t_list *in, t_list *toclose)
 {
 	pid_t pid;
 	char buf[2];
@@ -59,9 +52,11 @@ int		manage_in(t_list *in)
 		ft_putstr("forkerror");
 	else if (pid == 0)
 	{
+		multiclose(toclose);
+		close(pip[0]);
 		while (in)
 		{
-			while (read((*((int*)(in->content))), buf, 1))
+			while (read(in->content_size, buf, 1))
 				write(pip[1], buf, 1);
 			in = in->next;
 		}

@@ -10,10 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21.h"
+#include "includes/21.h"
 
-//possible aue del soit inutile, je crois quel delete toute la lst mais normalement y a qu'un maillon au moment ou c'est appele
-void	del(t_list **lst)
+//close tout les fd de la liste
+void	multiclose(t_list *toclose)
+{
+	while (toclose)
+	{
+		close(toclose->content_size);
+		toclose = toclose->next;
+	}
+}
+
+//delete et close (ou pas) la list
+void	del_close_lst(t_list **lst, int flag)
 {
 	t_list *tmp;
 
@@ -21,12 +31,13 @@ void	del(t_list **lst)
 	{
 		tmp = *lst;
 		*lst = (*lst)->next;
+		flag ? close(tmp->content_size) : 0;
 		free(tmp);
 	}
 	*lst = NULL;
 	return ;
 }
-
+//env stocké dans une static
 char 	**sg_env(char **env)
 {
 	static char **e = NULL;
@@ -35,7 +46,7 @@ char 	**sg_env(char **env)
 		e = env;
 	return (e);
 }
-
+//liste to str avec les liste d'item, en colant les mot avec des ' ' entre chaque
 char	*lsttostr(t_list *lst)
 {
 	char	*str;
@@ -60,31 +71,32 @@ char	*lsttostr(t_list *lst)
 	}
 	return (str);
 }
-
-int		ft_lstdellast(t_list *lst)
+//delete et close (ou pas) le dernier maillon de la liste
+t_list		*ft_lstdellast(t_list *lst, int flag)
 {
 	t_list *tmp;
+	t_list *start;
 
+	start = lst;
 	tmp = lst;
 	if(!lst->next)
-		{
-			close(*((int *)(lst->content)));
-			free(lst);
-			tmp->next = NULL;
-			return (1);
-		}
-
+	{
+		flag ? close(lst->content_size) : 0;
+		free(lst);
+		tmp->next = NULL;
+		return (NULL);
+	}
 	while (lst->next)
 	{
 		lst = lst->next;
 		if (!lst->next)
 		{
-			close(*((int *)(lst->content)));
+			flag ? close(lst->content_size) : 0;
 			free(lst);
 			tmp->next = NULL;
-			return (1);
+			return (start);
 		}
 		tmp = tmp->next;
 	}
-	return (0);
+	return (NULL);
 }

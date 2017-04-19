@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21.h"
-
+#include "includes/21.h"
+//debug
 void	ft_putlist(t_list *lst)
 {
 	ft_putendl("-------------------------------");
@@ -29,6 +29,7 @@ void	ft_putlist(t_list *lst)
 	ft_putendl("-------------------------------");
 }
 
+//debug
 void	ptree(t_tree *tre)
 {
 	if (tre == NULL)
@@ -55,45 +56,51 @@ void	ptree(t_tree *tre)
 	}
 }
 
-void affiche(t_tree *a, int profondeur)
+//normalement inutile, getlinetcap doit pas prendre non ascii
+int isimprchar(char *str)
 {
-	if (a == NULL) return;
-//	for (int i = 0; i <= profondeur; i++)
-//		printf("|");
-	if (a == NULL)
+	if (!str)
+		return (0);
+	while (*str)
 	{
-		ft_putstr("rieeeeeeeeeeeeeeen");
-		return ;
+		if (!ISCHARIMP(*str))
+			return (0);
+		str++;
 	}
-	if (T(a)->type == 0)
-		printf("+%s", lsttostr(a->content));
-	else
-		printf("+%s", T(a)->itm);
-	affiche(a->lf, profondeur+1);
-	affiche(a->rg, profondeur+1);
+	return (1);
 }
-
 
 int main(int ac , char **av, char **env)
 {
 	char *line;
 	t_list *lst;
+	t_list *tablist[4];
 	t_tree *tre;
 
+	ac = ac;
+	av =av;
+	bzero(tablist, sizeof(t_list *) * 4);
 	ft_putstr("?>");
-	sg_env(env);
+	sg_env(env); // save env dans une static
 	line = NULL;
-	while (get_next_line(0, &line))// && line)
+	while ((line = get_line_tcap()))
 	{
-	//	ft_putendl(line);
-		lst = lexer(ft_strtrim(line));
+		if (isimprchar(line))
+		{
+	//		ft_putendl(line);
+			lst = lexer(ft_strtrim(line));
+	//		ft_putlist(lst);
+			tre = parser(lst);
+	//		ptree(tre);
+			res(tre, tablist);
+			bzero(tablist, sizeof(t_list *) * 4);
+			while (wait(0) > 0)//attend tous les fils
+				;
+		}
+		else
+			ft_putstr("non char");
 		free(line);
-	//	ft_putlist(lst);
-		tre = parser(lst);
-//		ptree(tre);
-	//	affiche(tre, 0);
-	//	getchar();
-		res(tre, NULL, NULL);
 		ft_putstr("?>");
 	}
+	return (0);
 }

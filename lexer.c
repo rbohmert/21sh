@@ -9,8 +9,11 @@
 /*   Updated: 2017/03/27 05:47:24 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "21.h"
+#include "includes/21.h"
 
+
+/* transforme liste de char en liste item avec un char * et un type:
+mot, separateur, pipe, redirection, redirection de fd (agregation)*/
 void	typage(t_list *lst)
 {
 	char	*tok;
@@ -32,7 +35,7 @@ void	typage(t_list *lst)
 					lst->content_size |= RFD;
 			}
 		}
-		item = malloc(sizeof(t_item));///////LOLOL
+		item = malloc(sizeof(t_item));
 		item->itm = lst->content;
 		item->type = lst->content_size;
 		lst->content = item;
@@ -69,6 +72,7 @@ char	*redir(char *line, int i, int *adrr_cmp, char *tok)
 	return (tok);
 }
 
+//recupere le token et avance le compteur après
 char	*gettok(char *line, int i, int *adrr_cmp)
 {
 	char *tok;
@@ -90,7 +94,7 @@ char	*gettok(char *line, int i, int *adrr_cmp)
 		(*adrr_cmp)++;
 	}
 	if (c == '>')
-		redir(line, i, adrr_cmp, tok);
+		redir(line, i, adrr_cmp, tok);//recupère token chiant redirection sortie
 	if (c == 0)
 		tok = NULL;//free leaks
 	return (tok);
@@ -109,6 +113,11 @@ void	split_text(char *str, t_list **lst)
 		ft_push_back(lst, strtab[i++], 0);
 }
 
+/*transforme la str recu en list; avance jusqua trouver un '<>|&',
+ push tout ce qui est avant donc des "mots" avec 1 mot par maillon,
+ puis push le maillon  'token' donc un truc de commande '2>&1' '&&' ...ect
+pour les noms token ect et dans les define j'ai du faire nimp, pas grave*/
+
 t_list	*lexer(char *line)
 {
 	int i;
@@ -123,10 +132,11 @@ t_list	*lexer(char *line)
 	{
 		if (CISSYM(line[i]) || !line[i])
 		{
-			len = i - tmp - ((line[i] == '>' && (i > 0 && (line[i - 1] == '2' || line[i - 1] == '1'))) ? 1 : 0);
-			split_text(ft_strsub(line, tmp, len), &lst);
+			//len = taille de la str depuis le dernier token
+			len = i - tmp - ((line[i] == '>' && (i > 0 && (line[i - 1] == '2' || line[i - 1] == '1'))) ? 1 : 0);//ternaire pour enlever 1 a len si le token c'est '2>&1' ou '1>' pas compter le chiffre avant les symboles
+			split_text(ft_strsub(line, tmp, len), &lst);// push les mot
 			if (line[i])
-				ft_push_back(&lst, gettok(line, i, &i), 1);
+				ft_push_back(&lst, gettok(line, i, &i), 1); //push le token et avance i apres le token
 			tmp = i;
 			if (!line[i])
 				break;
@@ -134,6 +144,6 @@ t_list	*lexer(char *line)
 		else
 			i++;
 	}
-	typage(lst);
+	typage(lst);// type la list pour le parsing
 	return (lst);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21.h"
+#include "includes/21.h"
 
 char *addretline(char *str)
 {
@@ -23,7 +23,8 @@ char *addretline(char *str)
 	return(new);
 }
 
-int heredoc(char *endword)
+//attend sur l'entree standard jusqu'au endword, envois tout ce qui est ecrit dans le pipe
+int heredoc(char *endword, t_list *toclose)
 {
 	int pid;
 	int pip[2];
@@ -34,6 +35,7 @@ int heredoc(char *endword)
 		ft_putstr("la vieille forkette");
 	else if (pid == 0)
 	{
+		multiclose(toclose);
 		close(pip[0]);
 		ft_putstr("heredoc>");
 		while (get_next_line(0, &line))
@@ -51,8 +53,8 @@ int heredoc(char *endword)
 	close(pip[1]);
 	return (pip[0]);
 }
-
-int	redir_outfile(char *name, int flag)
+//attend sur la lecture du pipe et ecrit dans un fichier,renvois le bout pour ecrire
+int	redir_outfile(char *name, int flag, t_list *toclose)
 {
 	int pid;
 	int pip[2];
@@ -64,6 +66,7 @@ int	redir_outfile(char *name, int flag)
 		ft_putstr("c'est la merde frero");
 	else if (pid == 0)
 	{
+		multiclose(toclose);
 		close(pip[1]);
 		fdfile = open(name, O_WRONLY | O_CREAT | (flag ? O_APPEND : O_TRUNC), 0644);
 		while (read(pip[0], buf, 1))
@@ -74,7 +77,8 @@ int	redir_outfile(char *name, int flag)
 	return (pip[1]);
 }
 
-int redir_infile(char *name)
+//lis le fichier name et envois dans le pipe
+int redir_infile(char *name, t_list *toclose)
 {
 	int pid;
 	int pip[2];
@@ -86,6 +90,7 @@ int redir_infile(char *name)
 		ft_putstr("fork moisi");
 	else if (pid == 0)
 	{
+		multiclose(toclose);
 		close(pip[0]);
 		fdfile = open(name, O_RDONLY);
 		while (read(fdfile, buf, 1))
@@ -96,35 +101,51 @@ int redir_infile(char *name)
 	return (pip[0]);
 }
 
-int exec_redirection(t_tree *tree, t_list *in, t_list *out)
+//fais les agregation, efface list de sortie pour la remplacer par l'autre
+void	res_aggreg(t_tree *tree, t_list *fd[4])
 {
-	t_list *tmp;
-	int		fd;
+	//ft_putnbr(((char *)T(tree)->itm)[0] - 48);
+	if (((char *)T(tree)->itm)[0] == ((char *)T(tree)->itm)[3])
+		return ;
+	del_close_lst(&fd[((char *)T(tree)->itm)[0] - 48], 1);
+	fd[((char *)T(tree)->itm)[0] - 48] = fd[((char *)T(tree)->itm)[3] - 48];
+	res(tree->rg, fd);
+	
+}
 
-	tmp = out;
+/*en gros, si pas une aggregation (&), recupere un fd suivant la fonction de 
+redirection et le push dans la liste corespondante, et res a droite puis 
+close et del de la list le fd qui sert plus a rien une fois le res finit
+le noeud de gauche contient le nom du fichier ou endword pour les redir*/
+int exec_redirection(t_tree *tree, t_list *fd[4])
+{
+	int		fdpip;
+
 	if (((char *)T(tree)->itm)[2] != '&') 
 	{
 		if (((char *)T(tree)->itm)[1] == '>')
 		{
 			if (((char *)T(tree)->itm)[2] == '>')
-				fd = redir_outfile(lsttostr(tree->lf->content), 1);
+				fdpip = redir_outfile(lsttostr(tree->lf->content), 1, fd[TOCLOSE]);
 			else
-				fd = redir_outfile(lsttostr(tree->lf->content), 0);
-			ft_push_back(&out, &fd, 0);
-			res(tree->rg, in, out);
-			close(fd);
-			ft_lstdellast(out);
+				fdpip = redir_outfile(lsttostr(tree->lf->content), 0, fd[TOCLOSE]);
+			ft_push_back(&fd[((char *)T(tree)->itm)[0] - 48], NULL, fdpip);
+			res(tree->rg, fd);
+			close(fdpip);
+			fd[((char *)T(tree)->itm)[0] - 48] = ft_lstdellast(fd[((char *)T(tree)->itm)[0] - 48], 1);// char - 48 ->trick pour atoi avec un char
 		}
 		else if (((char *)T(tree)->itm)[0] == '<')
 		{
 			if (((char *)T(tree)->itm)[1] == '<')
-				fd = heredoc(lsttostr(tree->lf->content));
+				fdpip = heredoc(lsttostr(tree->lf->content), fd[TOCLOSE]);
 			else 
-				fd = redir_infile(lsttostr(tree->lf->content));
-			ft_push_back(&in, &fd, 0);
-			res(tree->rg, in, out);
-			ft_lstdellast(in);
+				fdpip = redir_infile(lsttostr(tree->lf->content), fd[TOCLOSE]);
+			ft_push_back(&fd[IN], NULL, fdpip);
+			res(tree->rg, fd);
+			fd[IN] = ft_lstdellast(fd[IN], 1);
 		}
 	}
+	else
+		res_aggreg(tree, fd);
 	return (1);
 }

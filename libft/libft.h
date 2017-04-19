@@ -109,5 +109,5 @@ void				ft_ptabstr(char **str);
 t_list				*ft_lstcut(t_list *end_first_lst);
 t_tree				*ft_crea_tree(void *content, t_tree *let, t_tree *right);
 void				ft_lstcat(t_list *lst1, t_list *lst2);
-
+char				*ft_strndup(char *str, int n);
 #endif

@@ -13,8 +13,9 @@
 #ifndef DEUXUN_H
 # define DEUXUN_H
 
-# include "libft/libft.h"
-# include "minishell/minishell.h"
+# include "../libft/libft.h"
+# include "minishell.h"
+# include "line_edit.h"
 # define SYM 0b00000001
 # define SEP 0b00000010
 # define PIP 0b00000100
@@ -22,6 +23,7 @@
 # define RFD 0b00010000
 # define CISSYM(c) (c == '<' || c == '>' || c == ';' || c == '|' || c == '&')
 # define TYPE content_size
+# define ISCHARIMP(c) (c > 31 && c < 127) 
 # define ISSYM(x) (x & SYM)
 # define ISSEP(x) (x & SEP)
 # define ISPIP(x) (x & PIP)
@@ -52,7 +54,7 @@ int		manage_in(t_list *in, t_list *toclose);
 int		manage_out(int outcom, t_list *out, t_list *toclose);
 char	*lsttostr(t_list *lst);
 t_list	*ft_lstdellast(t_list *lst, int flag);
-void	del(t_list **lst);
+void	del_close_lst(t_list **lst, int flag);
 char	**sg_env(char **env);
 int		exec_redirection(t_tree *tree, t_list *fd[4]);
 void	multiclose(t_list *toclose);

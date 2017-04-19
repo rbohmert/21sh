@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21.h"
+#include "includes/21.h"
+
+//beaucoup de bordel pour des cas particulier
 
 void 	error_parse()
 {
@@ -20,7 +22,7 @@ void 	error_parse()
 }
 
 //cherche maillon fin de la premiere liste (on va couper lst en 2)
-//1e maillon PIPE ou SEP erreur
+//1e maillon PIPE ou SEP i->erreur
 //cas spe RED au 1e maillon -> renvoie 2eme maillon
 //pour les SEP cherche en 1e ';', puis reste, par la fin
 //pour les autre dans l'ordre de la liste
@@ -49,6 +51,11 @@ t_list	*lstchrend(t_list *lst, int flag)
 	return (tmp);
 }
 
+
+/*s'occuppe de couper et tout, avec le debut et fin de la  1er lst 
+(maillon juste avant le token)
+facile pour pipe et separation,
+bordel pour les redirection car peuvent etre mise partout dans une commande */
 t_tree	*make_tree(t_list *beg, t_list *end, int flag)
 {
 	t_tree *tree;
@@ -56,19 +63,21 @@ t_tree	*make_tree(t_list *beg, t_list *end, int flag)
 	tree = NULL;
 	if (flag == SEP || flag == PIP)
 	{
-		end = ft_lstcut(end);
+		end = ft_lstcut(end); //donne le debut de la 2e lst donc le token
 		tree = ft_crea_tree(end->content, parser(beg), parser(end->next));
 		free(end);
 	}
+	/*pour les redir on met le nom du fichier(ou rien pour agregation)  a gauche
+	 et le reste de l'arbre a droite */
 	else if (flag == RED)
 	{
-		if (ISRED(L(beg)->type))//comm au dessus
-		{
+		if (ISRED(L(beg)->type))//si redir au debut de la comm voir com lstchr 
+		{//ici beg = 1maillon et end= 2eme
 			if ((!end || ISSYM(L(end)->type)) && !ISRFD(L(beg)->type))
-				error_parse();
-			else if (ISRFD(L(beg)->type))
+				error_parse();//si c'est pas une agregation doit y avoir un nom de fichier
+			else if (ISRFD(L(beg)->type))//si agregation
 			{
-				tree = ft_crea_tree(beg->content, NULL, parser(end));
+				tree = ft_crea_tree(beg->content, NULL, parser(end));//rien a gauche
 				free(beg);
 			}
 			else
@@ -77,6 +86,7 @@ t_tree	*make_tree(t_list *beg, t_list *end, int flag)
 				free(beg);
 			}
 		}
+		/*coupe, fait le noeud, et colle les liste pour relancer parser a droite*/
 		else
 		{
 			end =  ft_lstcut(end);
@@ -99,6 +109,12 @@ t_tree	*make_tree(t_list *beg, t_list *end, int flag)
 	return (tree);
 }//met des liste dans content du tree... peux beug, certainement dans cas RED debut ligne (aux comm au dessus)
 
+
+/*parse en recursif, cherche les token (dans l'ordre des if) 
+et quand il en  trouve coupe la liste avant et apres le maillon 
+(ca fait 2 liste et le maillon du token),
+met le token dans un noeud et rappelle parser sur la liste d'avant pour faire le 
+noeud de gauche et celle d'apres pour le droit */
 t_tree	*parser(t_list *beg)
 {
 	t_list *lst;
