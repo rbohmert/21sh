@@ -18,32 +18,35 @@ pas fais*/
 int		exec_separation(t_tree *tree, t_list *fd[4])
 {
 	int ret;
+	int status;
 
+	ret = 1;
 	if (!ft_strcmp(T(tree)->itm, ";"))
 	{
 		res(tree->lf, fd);
-		while (wait(0) > 0)
+		while (wait(&ret) > 0)
 			;
 		res(tree->rg, fd);
-		ret = 1;
 	}
 	if (!ft_strcmp(T(tree)->itm, "&&"))
 	{
-		if ((ret = res(tree->lf, fd)))
+		res(tree->lf, fd);
+		while (wait(&status) > 0)
 		{
-		while (wait(0) > 0)
-			;	
-			ret = res(tree->rg, fd);
+			ret = WIFEXITED(status) == 1 ? ret : 0;
+			ret = WEXITSTATUS(status) == 0 ? ret : 0;
 		}
+		ret ? res(tree->rg, fd) : 0;
 	}
 	if (!ft_strcmp(T(tree)->itm, "||"))
 	{
-		if (!(ret = res(tree->lf, fd)))
+		res(tree->lf, fd);
+		while (wait(&status) > 0)
 		{
-		while (wait(0) > 0)
-			;
-			ret = res(tree->rg, fd);
+			ret = WIFEXITED(status) == 1 ? ret : 0;
+			ret = WEXITSTATUS(status) == 0 ? ret : 0;
 		}
+		ret ? 0 : res(tree->rg, fd);
 	}
 	if (!ft_strcmp(T(tree)->itm, "&"))
 	{
