@@ -1,4 +1,4 @@
-#include "../includes/line_edit.h"
+#include "../includes/21.h"
 //touche suppr, supprime le char de la line dans le memoire et reecrit 
 void	suppr(t_sh *sh)
 {

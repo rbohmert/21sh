@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/21.h"
 
 void	add_env(char **arg, char **env, int ac)
 {

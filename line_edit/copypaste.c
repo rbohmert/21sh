@@ -1,4 +1,4 @@
-#include "../includes/line_edit.h"
+#include "../includes/21.h"
 
 //surligne suvant fleche gauche ou droite et bouge le curs en fonction et set 
 //le curscc si il est pas mis
@@ -74,6 +74,7 @@ void	rewrite_line(t_sh *sh)
 {
 	tputs(tgoto(tgetstr("cm", NULL), 2, sh->yfirstl - 1), 1, ptchr);
 	ft_putstr(sh->line);
+	ft_putstr("                         ");
 	curs_pos(sh);
 }
 

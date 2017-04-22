@@ -8,9 +8,6 @@
 # include <term.h>
 # include <stdio.h>
 # include <signal.h>
-# include "../libft/libft.h"
-# include "21.h"
-# include "minishell.h"
 # define ISARR(x) (x[0] == 27 && x[1] == 91 && x[4] == 0)
 # define ISIMPRC(x) (x[0] > 31 && x[0] < 127 && x[1] == 0)
 # define RARROW(x) (x[2] == 67 && x[3] == 0)

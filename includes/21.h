@@ -14,8 +14,10 @@
 # define DEUXUN_H
 
 # include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 # include "minishell.h"
 # include "line_edit.h"
+# include "history.h"
 # define SYM 0b00000001
 # define SEP 0b00000010
 # define PIP 0b00000100

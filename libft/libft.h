@@ -38,6 +38,13 @@ typedef struct		s_clist
 	struct s_clist	*prev;
 }					t_clist;
 
+typedef struct		s_2list
+{
+	void			*content;
+	struct s_2list	*next;
+	struct s_2list  *prev;
+}					t_2list;
+
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					ft_isalnum(int c);
@@ -110,4 +117,7 @@ t_list				*ft_lstcut(t_list *end_first_lst);
 t_tree				*ft_crea_tree(void *content, t_tree *let, t_tree *right);
 void				ft_lstcat(t_list *lst1, t_list *lst2);
 char				*ft_strndup(char *str, int n);
+t_2list				*ft_create_2lst(void *content);
+void				ft_push_2back(t_2list **lst, void *content);
+void				ft_push_2front(t_2list **lst, void *content);
 #endif

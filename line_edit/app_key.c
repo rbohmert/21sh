@@ -1,4 +1,4 @@
-#include "../includes/line_edit.h"
+#include "../includes/21.h"
 
 //redirige selon la touche, annule le surlignage et les truc de copipaste si
 //c'est pas un shift+fleche
@@ -44,10 +44,10 @@ void	arrow(char buf[10], t_sh *sh)
 		sh->curs == (sh->lenline) ? 0 : sh->curs++;
 	if (LARROW(buf))
 		!sh->curs ? 0 : sh->curs--;
-	/*if (UARROW(buf))
-		sh ? 0 : 0; //history_up();
+	if (UARROW(buf))
+		history_up(sh);
 	if (DARROW(buf))
-		sh ? 0 : 0; //history_down();*/
+		history_down(sh);
 	if (ENDARR(buf))
 		sh->curs = sh->lenline;
 	if (HOMARR(buf))

@@ -1,4 +1,4 @@
-#include "../includes/line_edit.h"
+#include "../includes/21.h"
 
 void	init_sh(t_sh *sh)
 {
@@ -27,6 +27,9 @@ char *get_line_tcap(void)
 		if (!strcmp(buf, "\n"))
 		{
 			restore_term(&sh);
+			history_add(sh.line);
+			(sg_history(NULL))->current = NULL;
+			rewrite_history();
 			return(sh.line);
 		}
 		app_key(buf, &sh);
