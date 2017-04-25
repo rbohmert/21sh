@@ -20,9 +20,9 @@ void	history_up(t_sh *sh)
 	}
 	free(sh->line);
 	sh->line = ft_strdup(E(hst->current)->line);
-	sh->curs = 0;
 	sh->lenline = ft_strlen(sh->line);
 	rewrite_line(sh);
+	sh->curs = sh->lenline;
 }
 
 void	history_down(t_sh *sh)
@@ -37,9 +37,9 @@ void	history_down(t_sh *sh)
 	hst->current = hst->current->prev;
 	free(sh->line);
 	sh->line = ft_strdup(E(hst->current)->line);
-	sh->curs = 0;
 	sh->lenline = ft_strlen(sh->line);
 	rewrite_line(sh);//reecrire ca	
+	sh->curs = sh->lenline;
 }
 
 void	history_add(char *str)

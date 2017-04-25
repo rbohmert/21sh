@@ -21,7 +21,7 @@ SRC =	minishell/minishell.c minishell/builtins.c minishell/utils.c\
 		line_edit/app_key.c line_edit/utils.c line_edit/term_sig.c\
 		line_edit/copypaste.c line_edit/key_actions.c\
 		history/history.c history/utils.c\
-		lexer.c parser.c resolve.c manage.c utils.c exec_redir.c\
+		lexer.c parser.c resolve.c manage.c utils.c exec_redir.c sig.c\
 
 GCC =	gcc -W -Wall -Werror -g -o $(NAME) -I/usr/include/
 
@@ -30,7 +30,7 @@ all: $(NAME)
 $(NAME):
 		make -C libft/
 		make -C libft/ clean
-		$(GCC) $(SRC) $(LIB) -ltermcap
+		$(GCC) $(SRC) $(LIB) -ltermcap 
 
 clean:
 	make -C libft/ clean

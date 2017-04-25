@@ -19,23 +19,38 @@ char *get_line_tcap(void)
 {
 	t_sh sh;
 	char buf[10];
+	int pip[2];
+	int pid;
+	char *line;
 
-	init_sh(&sh);
-	bzero(buf, 10);
-	while (read(0, buf, 10))
+	pipe(pip);
+	if ((pid = fork()) == 0)
 	{
-		if (!strcmp(buf, "\n"))
-		{
-			restore_term(&sh);
-			history_add(sh.line);
-			(sg_history(NULL))->current = NULL;
-			rewrite_history();
-			return(sh.line);
-		}
-		app_key(buf, &sh);
+		sg_history(get_history());
+		signal(SIGINT, SIG_DFL);
+		init_sh(&sh);
 		bzero(buf, 10);
+		while (read(0, buf, 10))
+		{
+			if (!strcmp(buf, "\n"))
+			{
+				restore_term(&sh);
+				history_add(sh.line);
+				(sg_history(NULL))->current = NULL;
+				rewrite_history();
+				ft_putstr_fd(sh.line, pip[1]);
+				exit(0);
+				//return(sh.line);
+			}
+			app_key(buf, &sh);
+			bzero(buf, 10);
+		}
 	}
-	return (NULL);
+	close(pip[1]);
+	waitpid(pid, 0, 0);
+	get_next_line(pip[0], &line);
+	close(pip[0]);
+	return (line);
 }	
 
 /*int main(int ac , char **av, char **env)

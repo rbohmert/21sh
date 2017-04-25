@@ -82,6 +82,7 @@ int main(int ac , char **av, char **env)
 	sg_env(env); // save env dans une static
 	sg_history(get_history());
 	bzero(tablist, sizeof(t_list *) * 4);
+	block_sig();
 	ft_putstr("?>");
 	line = NULL;
 	while ((line = get_line_tcap()))

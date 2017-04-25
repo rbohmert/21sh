@@ -55,5 +55,3 @@ void	arrow(char buf[10], t_sh *sh)
 	if (SUPPR(buf))
 		suppr(sh);
 }
-
-

@@ -29,34 +29,3 @@ int		init_term(t_sh *sh)
 	ioctl(0, TIOCGWINSZ, &(sh->win));
 	return (1);
 }
-
-void	sighandler(int sig)
-{
-	//if (sig == SIGWINCH)
-	//	change_size();
-	if (sig == SIGINT || sig == SIGQUIT)// || sig == SIGTERM)
-	{
-		restore_term(get_sh(NULL));
-		exit(0)	;
-	}	
-	//else if (sig == SIGTSTP)
-	//	stop(SIGTSTP);
-	//else if (sig == SIGCONT)
-	//	continu(SIGCONT);
-	else
-	{
-		ft_putnbr(sig);
-		ft_putnbr(SIGWINCH);
-		ft_putstr("signal non gere magueul\n");
-	}
-}
-
-void	block_sig(void)
-{
-	int i;
-
-	i = 0;
-	while (i < 33)
-		signal(i++, sighandler);
-}
-

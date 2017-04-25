@@ -18,6 +18,7 @@ void		rewrite_history(void)
 		lst = lst->prev;
 	}	
 }
+
 t_2list		*get_lst_from_file(int fd)
 {
 	char *line;
