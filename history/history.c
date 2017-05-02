@@ -59,7 +59,7 @@ void	history_add(char *str)
 		if (!(elem = malloc(sizeof(t_elemhst))))
 			return ;
 		elem->line = ft_strdup(str);	
-		elem->no = E(hst->lst)->no + 1;
+		elem->no = hst->lst ? E(hst->lst)->no + 1 : 0;
 		ft_push_2front(&hst->lst, elem);
 	}
 }

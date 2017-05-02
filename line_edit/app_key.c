@@ -4,6 +4,23 @@
 //c'est pas un shift+fleche
 void	app_key(char buf[10], t_sh *sh)
 {
+	/*ft_putchar('\n');
+	ft_putchar('\n');
+	ft_putnbr(buf[0]);
+	ft_putchar(' ');
+	ft_putnbr(buf[1]);
+	ft_putchar(' ');
+	ft_putnbr(buf[2]);
+	ft_putchar(' ');
+	ft_putnbr(buf[3]);
+	ft_putchar(' ');
+	ft_putnbr(buf[4]);
+	ft_putchar(' ');
+	ft_putnbr(buf[5]);
+	ft_putchar(' ');
+	ft_putnbr(buf[6]);
+	ft_putchar(' ');
+	ft_putchar('\n');*/
 	if (ISCCARR(buf))
 		shift_arrow(buf, sh);
 	else if (ISCTRLY(buf))
@@ -32,8 +49,10 @@ void	ctrl(char buf[10], t_sh *sh)
 {
 	if (buf[0] == 1)
 		sh->curs = 0;
-	else if (buf[0] == 4)
-		suppr(sh);
+	//else if (buf[0] == 4)
+		//suppr(sh);
+	//else if (buf[0] == 9)
+	//	autocomplete(sh);
 	else if (buf[0] == 16)
 		paste(sh);
 }

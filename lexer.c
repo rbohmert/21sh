@@ -111,6 +111,7 @@ void	split_text(char *str, t_list **lst)
 	free(str);
 	while (strtab[i])
 		ft_push_back(lst, strtab[i++], 0);
+	ft_freestrtab(strtab);
 }
 
 /*transforme la str recu en list; avance jusqua trouver un '<>|&',
@@ -145,5 +146,6 @@ t_list	*lexer(char *line)
 			i++;
 	}
 	typage(lst);// type la list pour le parsing
+	//free(line);
 	return (lst);
 }

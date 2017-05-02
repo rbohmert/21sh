@@ -42,13 +42,20 @@ char *get_line_tcap(void)
 				exit(0);
 				//return(sh.line);
 			}
+			else if (ISCTRL(buf) && buf[0] == 4)
+			{
+				restore_term(&sh);
+				sg_history((t_history *)1);
+				exit(0);
+			}	
 			app_key(buf, &sh);
 			bzero(buf, 10);
 		}
 	}
 	close(pip[1]);
 	waitpid(pid, 0, 0);
-	get_next_line(pip[0], &line);
+	if (get_next_line(pip[0], &line) == 0)
+		exit(0);
 	close(pip[0]);
 	return (line);
 }	

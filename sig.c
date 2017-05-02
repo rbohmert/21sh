@@ -28,10 +28,11 @@ void	sighandler(int sig)
 
 void	block_sig(void)
 {
+	int sig[2] = {SIGINT, SIGCHLD};
 	int i;
 
 	i = 0;
-	while (i < 33)
-		signal(i++, sighandler);
+	while (i < 2)
+		signal(sig[i++], sighandler);
 }
 

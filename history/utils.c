@@ -9,6 +9,7 @@ void		rewrite_history(void)
 	lst = (sg_history(NULL))->lst;
 	file_name = join_path(get_env(sg_env(NULL), "HOME="), HISTORY_FILE);
 	fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	free(file_name);
 	while (lst->next)
 		lst = lst->next;
 	while (lst)
@@ -36,7 +37,9 @@ t_2list		*get_lst_from_file(int fd)
 		elem->line = ft_strdup(line);
 		elem->no = i++;
 		ft_push_2front(&lst, elem);
+		free(line);
 	}
+	free(line);
 	return (lst);
 }
 	
@@ -59,14 +62,28 @@ t_history	*get_history(void)
 	free(file_name);//certainement des fuite avec les joint
 	return (hst);
 }
-		
 
+void		free_history(t_history *hst)
+{
+	t_2list *lst;
+
+	while (hst->lst)
+	{
+		lst = hst->lst;
+		hst->lst = hst->lst->next;
+		free(((t_elemhst *)(lst->content))->line);
+		free(lst->content);
+	}
+	free(hst);
+}
 t_history  *sg_history(t_history *history)
 {
-	static t_history *history_sav;
+	static t_history *history_sav = NULL;
 
 	if (history == NULL)
 		return (history_sav);
+	if (history_sav != NULL)
+		free_history(history_sav);
 	history_sav = history;
 	return (NULL);
 //		hst->fd = open(HISTORY_FILE, O_RDWR | O_CREAT | O_TRUNC, 0644);

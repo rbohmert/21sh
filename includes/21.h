@@ -18,6 +18,7 @@
 # include "minishell.h"
 # include "line_edit.h"
 # include "history.h"
+# include "autocomplete.h"
 # define SYM 0b00000001
 # define SEP 0b00000010
 # define PIP 0b00000100

@@ -120,4 +120,5 @@ char				*ft_strndup(char *str, int n);
 t_2list				*ft_create_2lst(void *content);
 void				ft_push_2back(t_2list **lst, void *content);
 void				ft_push_2front(t_2list **lst, void *content);
+void				ft_freestrtab(char **strtab);
 #endif

@@ -35,10 +35,14 @@ char	*check(char **env, char *name, int no_built)
 		{
 			lstat(path, &buf);
 			if ((buf.st_mode & S_IXUSR) && !S_ISDIR(buf.st_mode))
+			{
+				ft_freestrtab(dir);
 				return (path);
+			}
 		}
 		free(path);
 	}
+	ft_freestrtab(dir);
 	return (NULL);
 }
 
@@ -78,6 +82,8 @@ int 	exe_com(char *name, char **arg, char **env, int fd[3], t_list *toclose)
 		}
 		else
 		{
+			free(name);
+			ft_freestrtab(arg);
 			if (fd[IN] != STDIN_FILENO)
 				close(fd[IN]);
 			if (fd[OUT] != STDOUT_FILENO)
@@ -100,6 +106,7 @@ int 	verif_line(char *str, int fd[3], t_list *toclose)
 	if (str[0])
 	{
 		ltab = ft_strsplit(str, ' ');
+		free(str);
 		if (!(str = check(env, ltab[0], 0)))//check pour les builtin aussi
 		{
 			ft_putstr("Command not found\n"); //dit ca si ./trucexistepas, a regler dans check

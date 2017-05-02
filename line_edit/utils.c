@@ -41,7 +41,8 @@ int		get_curs_y()
 
 	i = -1;
 	j = 0;
-	while (b[0] != 27 && b[1] != 91 && b[ft_strlen(b) - 1] != 'R')
+	bzero(b, 15);
+	while (b[0] != 27 && b[1] != 91)// && b[ft_strlen(b) - 1] != 'R')
 	{
 		bzero(b, 15);
 		ft_putchar(27);

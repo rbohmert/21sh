@@ -80,7 +80,6 @@ int main(int ac , char **av, char **env)
 	ac = ac;
 	av =av;
 	sg_env(env); // save env dans une static
-	sg_history(get_history());
 	bzero(tablist, sizeof(t_list *) * 4);
 	block_sig();
 	ft_putstr("?>");
@@ -90,7 +89,8 @@ int main(int ac , char **av, char **env)
 		if (isimprchar(line))
 		{
 	//		ft_putendl(line);
-			lst = lexer(ft_strtrim(line));
+			strtrim(&line);
+			lst = lexer(line);
 	//		ft_putlist(lst);
 			tre = parser(lst);
 	//		ptree(tre);
