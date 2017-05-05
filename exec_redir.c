@@ -51,6 +51,7 @@ int heredoc(char *endword, t_list *toclose)
 	}
 	waitpid(pid, 0, 0);
 	close(pip[1]);
+	free(endword);
 	return (pip[0]);
 }
 //attend sur la lecture du pipe et ecrit dans un fichier,renvois le bout pour ecrire
@@ -74,6 +75,7 @@ int	redir_outfile(char *name, int flag, t_list *toclose)
 		exit(0);
 	}
 	close(pip[0]);
+	free(name);
 	return (pip[1]);
 }
 
@@ -98,6 +100,7 @@ int redir_infile(char *name, t_list *toclose)
 		exit(0);
 	}
 	close(pip[1]);
+	free(name);
 	return (pip[0]);
 }
 

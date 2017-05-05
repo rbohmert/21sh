@@ -66,10 +66,41 @@ int isimprchar(char *str)
 		if (!ISCHARIMP(*str))
 			return (0);
 		str++;
+		return (1);
 	}
 	return (1);
 }
 
+void	free_tree(t_tree *tree)
+{
+	t_list *lst;
+	t_list *tmp;
+
+	if (!tree)
+		return;
+	if (tree->rg || tree->lf)
+	{
+		free_tree(tree->rg);
+		free_tree(tree->lf);
+		free(T(tree)->itm);
+		free(tree->content);
+		free(tree);
+	}
+	else
+	{
+		lst = tree->content;
+		while (lst)
+		{
+			tmp = lst;
+			lst = lst->next;
+			free(L(tmp)->itm);
+			free(tmp->content);
+			free(tmp);
+		}
+		free(tree);
+	}
+}
+	
 int main(int ac , char **av, char **env)
 {
 	char *line;
@@ -88,13 +119,14 @@ int main(int ac , char **av, char **env)
 	{
 		if (isimprchar(line))
 		{
-	//		ft_putendl(line);
+			//ft_putendl(line);
 			strtrim(&line);
 			lst = lexer(line);
-	//		ft_putlist(lst);
+			//ft_putlist(lst);
 			tre = parser(lst);
-	//		ptree(tre);
+			//ptree(tre);
 			res(tre, tablist);
+			free_tree(tre);
 			bzero(tablist, sizeof(t_list *) * 4);
 			while (wait(0) > 0)//attend tous les fils
 				;

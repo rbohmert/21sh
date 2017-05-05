@@ -15,6 +15,25 @@ void	init_sh(t_sh *sh)
 	sh->copy = NULL;
 }
 
+void	catch_sigint(int sig)
+{
+	t_sh *sh;
+
+	(void)sig;
+	sh = get_sh(NULL);
+	rewrite_line(sh);
+	sh->curs = 0;
+	sh->lenline = 0;
+	free(sh->line);
+	sh->line = ft_strnew(1);
+	sh->curscc = -1;
+	if (sh->copy)
+		free(sh->copy);
+	sh->copy = NULL;
+	ft_putstr("\n?>");
+	sh->yfirstl = get_curs_y();
+}
+
 char *get_line_tcap(void)
 {
 	t_sh sh;
@@ -27,7 +46,7 @@ char *get_line_tcap(void)
 	if ((pid = fork()) == 0)
 	{
 		sg_history(get_history());
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, catch_sigint);
 		init_sh(&sh);
 		bzero(buf, 10);
 		while (read(0, buf, 10))
@@ -38,7 +57,7 @@ char *get_line_tcap(void)
 				history_add(sh.line);
 				(sg_history(NULL))->current = NULL;
 				rewrite_history();
-				ft_putstr_fd(sh.line, pip[1]);
+				ft_putendl_fd(sh.line, pip[1]);
 				exit(0);
 				//return(sh.line);
 			}

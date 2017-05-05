@@ -25,7 +25,9 @@ int		exec_builtins(char *name, char **arg, char **env)
 	if (!(ft_strcmp(name, "unsetenv")))
 		ft_unsetenv(arg, env);
 	if (!(ft_strcmp(name, "exit")))
-		exit(2);
+		exit(0);
+	free(name);
+	ft_freestrtab(arg);
 	return(0);//a changer pour retour builtin (tjr ok pour le moment)
 }
 
@@ -82,10 +84,13 @@ void	ft_unsetenv(char **arg, char **env)
 		{
 			if (!ft_strncmp(env[i], arg[1], ft_strlen(arg[1])))
 			{
+				//free(env[i]); bordel dans l'env -> copier l'env au debu
+				//enfaite plutot strcpy quand setenv : pas de malloc env
 				env[i] = NULL;
 				while (env[++i])
 					env[i - 1] = env[i];
 				env[i - 1] = NULL;
+				break ;
 			}
 			i++;
 		}

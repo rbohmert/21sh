@@ -15,14 +15,17 @@
 void	add_env(char **arg, char **env, int ac)
 {
 	int i;
+	char *tmp;
 
 	i = 0;
+	tmp = NULL;
 	while (env[i])
 		i++;
 	if (ac == 2)
 		env[i] = ft_strjoin(arg[1], "=");
 	else
-		env[i] = ft_strjoin(ft_strjoin(arg[1], "="), arg[2]);
+		env[i] = ft_strjoin((tmp = ft_strjoin(arg[1], "=")), arg[2]);
+	tmp ? free(tmp) : 0;
 	env[i + 1] = NULL;
 }
 
@@ -30,6 +33,7 @@ void	ft_setenv(char **arg, char **env)
 {
 	int		ac;
 	char	*str;
+	char	*tmp;
 
 	ac = 0;
 	while (arg[ac])
@@ -40,11 +44,12 @@ void	ft_setenv(char **arg, char **env)
 		ft_putendl("usage setenv: setnenv VAR VALUE");
 	else
 	{
-		if (!(str = get_env(env, ft_strjoin(arg[1], "="))))
+		if (!(str = get_env(env, (tmp = ft_strjoin(arg[1], "=")))))
 			add_env(arg, env, ac);
 		else if (ac == 2)
 			str[0] = 0;
 		else
 			ft_strcpy(str, arg[2]);
+		free(tmp);
 	}
 }

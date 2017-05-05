@@ -36,7 +36,7 @@ void	app_key(char buf[10], t_sh *sh)
 		write_char(buf, sh);
 	if (buf[0] == 127)
 		del(sh);
-	if (ISIMPRC(buf))
+	if (ISCTRL(buf))
 		ctrl(buf, sh);
 	if (ISUDARR(buf))
 		go_up_down(buf, sh);

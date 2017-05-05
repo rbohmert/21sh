@@ -73,6 +73,7 @@ void		free_history(t_history *hst)
 		hst->lst = hst->lst->next;
 		free(((t_elemhst *)(lst->content))->line);
 		free(lst->content);
+		free(lst);
 	}
 	free(hst);
 }

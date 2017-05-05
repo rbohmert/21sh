@@ -23,7 +23,7 @@ char	*check(char **env, char *name, int no_built)
 	i = -1;
 	if ((!no_built && check_builtins(name)) ||\
 		(ft_strchr(name, '/') && !access(name, F_OK))) 
-		return (name);
+		return (ft_strdup(name));
 	if (get_env(env, "PATH="))
 		dir = ft_strsplit(get_env(env, "PATH="), ':');
 	else
@@ -109,6 +109,7 @@ int 	verif_line(char *str, int fd[3], t_list *toclose)
 		free(str);
 		if (!(str = check(env, ltab[0], 0)))//check pour les builtin aussi
 		{
+			ft_freestrtab(ltab);
 			ft_putstr("Command not found\n"); //dit ca si ./trucexistepas, a regler dans check
 			return (-1);
 		}

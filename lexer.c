@@ -110,7 +110,7 @@ void	split_text(char *str, t_list **lst)
 	strtab = ft_strsplit(str, ' ');
 	free(str);
 	while (strtab[i])
-		ft_push_back(lst, strtab[i++], 0);
+		ft_push_back(lst, ft_strdup(strtab[i++]), 0);
 	ft_freestrtab(strtab);
 }
 
