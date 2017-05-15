@@ -113,9 +113,9 @@ int		exec_command(t_tree *tree, t_list *fd_lst[4])
 	}
 	ret = verif_line(lsttostr(tree->content), fd, fd_lst[TOCLOSE]);
 	if (fd_lst[OUT])
-		manage_out(pipout[0], fd_lst[OUT], fd_lst[TOCLOSE]);
+		manage_out(pipout[0], fd_lst[OUT], fd_lst[TOCLOSE], ret);
 	if (fd_lst[ERR])
-		manage_out(piperr[0], fd_lst[ERR], fd_lst[TOCLOSE]);
+		manage_out(piperr[0], fd_lst[ERR], fd_lst[TOCLOSE], ret);
 	return (ret);
 }
 

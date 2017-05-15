@@ -1,9 +1,14 @@
 #include "includes/21.h"
 
+void	exit_pipe(int sig)
+{
+	ft_putendl("hfudi");
+	(void)sig;
+	exit(0);
+}
+
 void	sighandler(int sig)
 {
-	//if (sig == SIGWINCH)
-	//	change_size();
 	if (sig == SIGINT)// || sig == SIGQUIT)// || sig == SIGTERM)
 	{
 		while (wait(0) > 0)
@@ -12,10 +17,9 @@ void	sighandler(int sig)
 		//restore_term(get_sh(NULL));
 		//exit(0)	;
 	}	
-	//else if (sig == SIGTSTP)
-	//	stop(SIGTSTP);
-	//else if (sig == SIGCONT)
-	//	continu(SIGCONT);
+	//else if (sig == SIGPIPE)
+	//	kill(0, SIGINT);
+	//	ft_putendl("hnvdihi");
 	else if (sig == SIGCHLD)
 		;
 	else
@@ -28,11 +32,11 @@ void	sighandler(int sig)
 
 void	block_sig(void)
 {
-	int sig[2] = {SIGINT, SIGCHLD};
+	int sig[3] = {SIGPIPE, SIGINT, SIGCHLD};
 	int i;
 
 	i = 0;
-	while (i < 2)
+	while (i < 3)
 		signal(sig[i++], sighandler);
 }
 

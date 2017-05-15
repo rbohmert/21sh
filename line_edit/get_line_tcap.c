@@ -34,6 +34,16 @@ void	catch_sigint(int sig)
 	sh->yfirstl = get_curs_y();
 }
 
+void	change_size(int sig)
+{
+	t_sh *sh;
+
+	(void)sig;
+	sh = get_sh(NULL);
+	ioctl(0, TIOCGWINSZ, &(sh->win));
+	curs_pos(sh);
+}
+
 char *get_line_tcap(void)
 {
 	t_sh sh;
@@ -47,12 +57,13 @@ char *get_line_tcap(void)
 	{
 		sg_history(get_history());
 		signal(SIGINT, catch_sigint);
+		signal(SIGWINCH, change_size);
 		init_sh(&sh);
 		bzero(buf, 10);
 		while (read(0, buf, 10))
 		{
-			if (!strcmp(buf, "\n"))
-			{
+			if (!ft_strcmp(buf, "\n"))
+			{	
 				restore_term(&sh);
 				history_add(sh.line);
 				(sg_history(NULL))->current = NULL;

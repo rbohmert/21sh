@@ -42,24 +42,37 @@ void	history_down(t_sh *sh)
 	sh->curs = sh->lenline;
 }
 
+int		is_empty_line(char *str)
+{
+	while (*str)
+	{
+		if (*str != ' ' && *str != '\t' && *str != '\v')
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
 void	history_add(char *str)
 {
 	t_history *hst;
 	t_elemhst *elem;
 
 	hst = sg_history(NULL);
-	if (hst->current)
-	{
-		free(E(hst->current)->line);
-		E(hst->current)->line = ft_strdup(str);
-		//hst->current = NULL;
-	}
-	else
-	{
-		if (!(elem = malloc(sizeof(t_elemhst))))
-			return ;
-		elem->line = ft_strdup(str);	
-		elem->no = hst->lst ? E(hst->lst)->no + 1 : 0;
-		ft_push_2front(&hst->lst, elem);
-	}
+	//if (hst->current)
+	//{
+	//	free(E(hst->current)->line);
+	//	E(hst->current)->line = ft_strdup(str);
+				//hst->current = NULL;
+	//}
+	//else
+	//{
+	if (is_empty_line(str))
+		return ; 
+	if (!(elem = malloc(sizeof(t_elemhst))))
+		return ;
+	elem->line = ft_strdup(str);	
+	elem->no = hst->lst ? E(hst->lst)->no + 1 : 0;
+	ft_push_2front(&hst->lst, elem);
+	//}
 }

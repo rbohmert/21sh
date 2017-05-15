@@ -90,7 +90,7 @@ char	*gettok(char *line, int i, int *adrr_cmp)
 	}
 	if (c == ';')
 	{
-		tok = ";";
+		tok = ft_strdup(";");
 		(*adrr_cmp)++;
 	}
 	if (c == '>')

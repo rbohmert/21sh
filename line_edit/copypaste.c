@@ -50,6 +50,8 @@ void	paste(t_sh *sh)
 	int l;
 	int i;
 
+	if (sh->copy == NULL)
+		return ;
 	i = 0;
 	l = sh->lenline;
 	sh->lenline = ft_strlen(sh->line) + ft_strlen(sh->copy);

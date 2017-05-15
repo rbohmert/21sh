@@ -13,24 +13,29 @@
 #include "includes/21.h"
 
 //attend sur le fd donné (lecture du pipe) et reecrit dans tout les fd de out
-int		manage_out(int outcom, t_list *out, t_list *toclose)
+int		manage_out(int outcom, t_list *out, t_list *toclose, int assoc_pid)
 {
 	t_list *tmp;
 	char buf[2];
-	int ret;
 	int pid;
 
 	if ((pid = fork()) < 0)
 		ft_putstr("forkerror");
 	else if (pid == 0)
 	{
+		signal(SIGPIPE, SIG_IGN);
 		multiclose(toclose);
-		while ((ret = read(outcom, buf, 1)))
+		while (read(outcom, buf, 1))
 		{
 			tmp = out;
 			while (tmp)
 			{
-				write(tmp->content_size, buf, 1);
+				if (write(tmp->content_size, buf, 1) == -1)
+				{
+					
+					kill(assoc_pid, SIGINT);
+					exit(0);
+				}
 				tmp = tmp->next;
 			}
 		}
@@ -51,13 +56,17 @@ int		manage_in(t_list *in, t_list *toclose)
 	if ((pid = fork()) < 0)
 		ft_putstr("forkerror");
 	else if (pid == 0)
-	{
+	{	
+		signal(SIGPIPE, SIG_IGN);
 		multiclose(toclose);
 		close(pip[0]);
 		while (in)
 		{
 			while (read(in->content_size, buf, 1))
-				write(pip[1], buf, 1);
+			{
+				if (write(pip[1], buf, 1) == -1)
+					exit(0);
+			}
 			in = in->next;
 		}
 		exit(0);

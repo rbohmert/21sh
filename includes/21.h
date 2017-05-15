@@ -18,7 +18,6 @@
 # include "minishell.h"
 # include "line_edit.h"
 # include "history.h"
-# include "autocomplete.h"
 # define SYM 0b00000001
 # define SEP 0b00000010
 # define PIP 0b00000100
@@ -54,12 +53,13 @@ int		res(t_tree *tree, t_list *fd[4]);
 char 	*lsttostr(t_list *lst);
 char	**sg_env(char **env);
 int		manage_in(t_list *in, t_list *toclose);
-int		manage_out(int outcom, t_list *out, t_list *toclose);
+int		manage_out(int outcom, t_list *out, t_list *toclose, int assoc_pid);
 char	*lsttostr(t_list *lst);
 t_list	*ft_lstdellast(t_list *lst, int flag);
 void	del_close_lst(t_list **lst, int flag);
 char	**sg_env(char **env);
 int		exec_redirection(t_tree *tree, t_list *fd[4]);
 void	multiclose(t_list *toclose);
+void	exit_pipe(int sig);
 
 #endif

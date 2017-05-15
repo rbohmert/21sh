@@ -22,7 +22,7 @@ char	*check(char **env, char *name, int no_built)
 
 	i = -1;
 	if ((!no_built && check_builtins(name)) ||\
-		(ft_strchr(name, '/') && !access(name, F_OK))) 
+		(ft_strchr(name, '/') && !access(name, F_OK | X_OK))) 
 		return (ft_strdup(name));
 	if (get_env(env, "PATH="))
 		dir = ft_strsplit(get_env(env, "PATH="), ':');
@@ -61,6 +61,7 @@ int 	exe_com(char *name, char **arg, char **env, int fd[3], t_list *toclose)
 			ft_putstr("fork fail\n");
 		else if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
 			multiclose(toclose);
 			if (fd[IN] != STDIN_FILENO)
 			{
@@ -90,7 +91,7 @@ int 	exe_com(char *name, char **arg, char **env, int fd[3], t_list *toclose)
 				close(fd[OUT]);
 			if (fd[ERR] != STDERR_FILENO)
 				close(fd[ERR]);
-			return (1);
+			return (pid);
 		}
 	}
 	return(1);
@@ -110,6 +111,12 @@ int 	verif_line(char *str, int fd[3], t_list *toclose)
 		if (!(str = check(env, ltab[0], 0)))//check pour les builtin aussi
 		{
 			ft_freestrtab(ltab);
+			if (fd[IN] != STDIN_FILENO)
+				close(fd[IN]);
+			if (fd[OUT] != STDOUT_FILENO)
+				close(fd[OUT]);
+			if (fd[ERR] != STDERR_FILENO)
+				close(fd[ERR]);	
 			ft_putstr("Command not found\n"); //dit ca si ./trucexistepas, a regler dans check
 			return (-1);
 		}
