@@ -135,7 +135,7 @@ int exec_redirection(t_tree *tree, t_list *fd[4])
 			ft_push_back(&fd[((char *)T(tree)->itm)[0] - 48], NULL, fdpip);
 			res(tree->rg, fd);
 			close(fdpip);
-			fd[((char *)T(tree)->itm)[0] - 48] = ft_lstdellast(fd[((char *)T(tree)->itm)[0] - 48], 1);// char - 48 ->trick pour atoi avec un char
+			fd[((char *)T(tree)->itm)[0] - 48] = ft_lstdellast(&(fd[((char *)T(tree)->itm)[0] - 48]), 1);// char - 48 ->trick pour atoi avec un char
 		}
 		else if (((char *)T(tree)->itm)[0] == '<')
 		{
@@ -145,7 +145,7 @@ int exec_redirection(t_tree *tree, t_list *fd[4])
 				fdpip = redir_infile(lsttostr(tree->lf->content), fd[TOCLOSE]);
 			ft_push_back(&fd[IN], NULL, fdpip);
 			res(tree->rg, fd);
-			fd[IN] = ft_lstdellast(fd[IN], 1);
+			fd[IN] = ft_lstdellast((&fd[IN]), 1);
 		}
 	}
 	else

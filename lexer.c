@@ -131,7 +131,7 @@ t_list	*lexer(char *line)
 	tmp = 0;
 	while (1)
 	{
-		if (CISSYM(line[i]) || !line[i])
+		if ( !line[i] || CISSYM(line[i]))
 		{
 			//len = taille de la str depuis le dernier token
 			len = i - tmp - ((line[i] == '>' && (i > 0 && (line[i - 1] == '2' || line[i - 1] == '1'))) ? 1 : 0);//ternaire pour enlever 1 a len si le token c'est '2>&1' ou '1>' pas compter le chiffre avant les symboles

@@ -74,12 +74,13 @@ int exec_pipe(t_tree *tree, t_list *fd[4])
 	ft_push_back(&fd[IN], NULL, pip[0]);//met donc le bout le lecture dans in
 	ft_push_back(&fd[TOCLOSE], NULL, pip[1]);//et ecriture a fermer pour le moment
 	ret = res(tree->rg, fd);//envois tout ca a droite
-	fd[TOCLOSE] = ft_lstdellast(fd[TOCLOSE], 0);//maintenant enleve ecriture des fd a fermer
+	fd[TOCLOSE] = ft_lstdellast(&(fd[TOCLOSE]), 0);//maintenant enleve ecriture des fd a fermer
 	close(pip[0]);//ferme lecture
 	del_close_lst(&fd[IN], 0);//delete la liste in qui etait pour la droite
 	fd[IN] = tmp; //remet les in
 	ft_push_back(&fd[OUT], NULL, pip[1]);//met le bout ecriture dans out 
 	ret = res(tree->lf, fd); //envois a gauche
+	fd[OUT] = ft_lstdellast(&(fd[OUT]), 0);
 	close(pip[1]);//ferme ecriture
 	return (ret);
 }

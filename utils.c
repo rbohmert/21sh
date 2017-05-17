@@ -72,27 +72,28 @@ char	*lsttostr(t_list *lst)
 	return (str);
 }
 //delete et close (ou pas) le dernier maillon de la liste
-t_list		*ft_lstdellast(t_list *lst, int flag)
+//a refaire degeu
+t_list		*ft_lstdellast(t_list **lst, int flag)
 {
 	t_list *tmp;
 	t_list *start;
 
-	start = lst;
-	tmp = lst;
-	if(!lst->next)
+	start = *lst;
+	tmp = *lst;
+	if(!tmp->next)
 	{
-		flag ? close(lst->content_size) : 0;
-		free(lst);
-		tmp->next = NULL;
+		flag ? close((*(lst))->content_size) : 0;
+		free(*lst);
+		*lst = NULL;
 		return (NULL);
 	}
-	while (lst->next)
+	while ((*(lst))->next)
 	{
-		lst = lst->next;
-		if (!lst->next)
+		*(lst) = (*(lst))->next;
+		if (!((*(lst))->next))
 		{
-			flag ? close(lst->content_size) : 0;
-			free(lst);
+			flag ? close((*(lst))->content_size) : 0;
+			free(*lst);
 			tmp->next = NULL;
 			return (start);
 		}

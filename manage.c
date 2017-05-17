@@ -13,12 +13,17 @@
 #include "includes/21.h"
 
 //attend sur le fd donné (lecture du pipe) et reecrit dans tout les fd de out
+void	sigpipe(int sig)
+{	(void)sig; ft_putendl("sigpiiiiiiiip");}
+
 int		manage_out(int outcom, t_list *out, t_list *toclose, int assoc_pid)
 {
 	t_list *tmp;
 	char buf[2];
 	int pid;
 
+	ft_bzero(buf, 2);
+	(void)assoc_pid;
 	if ((pid = fork()) < 0)
 		ft_putstr("forkerror");
 	else if (pid == 0)
@@ -32,7 +37,8 @@ int		manage_out(int outcom, t_list *out, t_list *toclose, int assoc_pid)
 			{
 				if (write(tmp->content_size, buf, 1) == -1)
 				{
-					
+				//printf("pid kil : %d", assoc_pid);
+				//	ft_putendl("kiiiiiiiiiill");	
 					kill(assoc_pid, SIGINT);
 					exit(0);
 				}
@@ -65,7 +71,10 @@ int		manage_in(t_list *in, t_list *toclose)
 			while (read(in->content_size, buf, 1))
 			{
 				if (write(pip[1], buf, 1) == -1)
+				{
+			//		ft_putendl("crack dans le in");
 					exit(0);
+				}
 			}
 			in = in->next;
 		}

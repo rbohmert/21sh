@@ -19,7 +19,7 @@ void	strtrim(char **str)
 	char *nstrtmp;
 
 	tmp = *str;
-	nstr = ft_strnew(ft_strlen(tmp));
+	nstr = ft_strnew(ft_strlen(tmp) + 1);
 	nstrtmp = nstr;
 	while (*tmp == '\t' || *tmp == '\v' || *tmp == ' ')
 		tmp++;
