@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 22:02:48 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/11 01:37:35 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/05/10 20:24:06 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,38 @@ void	clr_env(char **nenv)
 {
 	int i;
 
-	i = 0;
-	while (nenv[i])
+	i = -1;
+	while (nenv[++i])
 	{
-		i++;
-		nenv[i - 1] = NULL;
+		free(nenv[i]);
+		nenv[i] = NULL;
 	}
 }
 
-void	add_key(char *str, char **nenv)
+void	add_key(char *str, char ***nenv)
 {
-	int i;
+	int		i;
+	char	**new;
 
 	i = 0;
-	while (nenv[i])
+	while ((*nenv)[i])
 		i++;
-	nenv[i] = ft_strdup(str);
-	nenv[i + 1] = NULL;
+	if (!(new = malloc((i + 2) * sizeof(char *))))
+		return ;
+	i = -1;
+	while ((*nenv)[++i])
+		new[i] = ft_strdup((*nenv)[i]);
+	new[i] = ft_strdup(str);
+	new[i + 1] = NULL;
+	ft_tabfree(nenv);
+	*nenv = new;
 }
 
-void	env_opt(char **arg, char **nenv, int *i)
+char	**env_opt(char **arg, char **env, int *i)
 {
+	char	**nenv;
+
+	nenv = malloc_env(env);
 	while (arg[*i] && arg[*i][0] == '-')
 	{
 		if (arg[*i][1] == 'i' && arg[*i][2] == 0)
@@ -63,11 +74,15 @@ void	env_opt(char **arg, char **nenv, int *i)
 		else if (arg[*i][1] == 'u' && arg[*i][2] == 0 && arg[*i + 1])
 			ft_unsetenv(arg + (*i)++, nenv);
 		else
-			ft_putstr("usage env [-i] [-u name] [utility [arguments ...]]\n");
+		{
+			ft_putstr_fd("usage env [-i] [-u name] [key=[arguments ...]]\n", 2);
+			return (NULL);
+		}
 		(*i)++;
 	}
 	while (arg[*i] && ft_strchr(arg[*i], '='))
-		add_key(arg[(*i)++], nenv);
+		add_key(arg[(*i)++], &nenv);
+	return (nenv);
 }
 
 void	ft_env(char **arg, char **env)
@@ -75,13 +90,14 @@ void	ft_env(char **arg, char **env)
 	int		i;
 	char	**nenv;
 	char	*com;
+	int		fd[3] = {0, 1, 2};
 
 	i = 1;
-	nenv = cp_env(env);
-	env_opt(arg, nenv, &i);
+	if (!(nenv = env_opt(arg, env, &i)))
+		return ;
 	if (arg[i] && (com = check(env, arg[i], 1)))
-		exe_com(com, arg + i, nenv, NULL, NULL);
-	else if (!arg[i])
+		exe_com(com, ft_tabdup(arg + i), &nenv, fd, NULL);
+	else if (!arg[1])
 		ft_ptabstr(nenv);
 	else
 	{
@@ -89,5 +105,5 @@ void	ft_env(char **arg, char **env)
 		ft_putstr(arg[i]);
 		ft_putstr(": commande introuvable\n");
 	}
-	free(nenv);
+	ft_tabfree(&nenv);
 }

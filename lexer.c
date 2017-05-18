@@ -79,7 +79,7 @@ char	*gettok(char *line, int i, int *adrr_cmp)
 	char c;
 
 	c = line[i];
-	if ((tok = (char *)malloc(5)) == NULL)
+	if ((tok = ft_strnew(5)) == NULL)
 		return (NULL);
 	if (c == '<' || c == '|' || c == '&')
 	{
@@ -90,7 +90,7 @@ char	*gettok(char *line, int i, int *adrr_cmp)
 	}
 	if (c == ';')
 	{
-		tok = ft_strdup(";");
+		tok[0] = ';';
 		(*adrr_cmp)++;
 	}
 	if (c == '>')
@@ -107,7 +107,9 @@ void	split_text(char *str, t_list **lst)
 	int i;
 
 	i = 0;
-	strtab = ft_strsplit(str, ' ');
+
+	strtrim_nocote(&str);	
+	strtab = make_arg(str);//ft_strsplit(str, ' ');
 	free(str);
 	while (strtab[i])
 		ft_push_back(lst, ft_strdup(strtab[i++]), 0);
@@ -142,6 +144,8 @@ t_list	*lexer(char *line)
 			if (!line[i])
 				break;
 		}
+		else if (line[i] == '"')
+			i += ft_strchr(line + i + 1, '"') - (line + i) + 1;
 		else
 			i++;
 	}

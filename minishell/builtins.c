@@ -6,45 +6,52 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/21 22:39:24 by rbohmert          #+#    #+#             */
-/*   Updated: 2017/03/11 01:37:41 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/05/15 21:23:27 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/21.h"
 
-int		exec_builtins(char *name, char **arg, char **env)
+int		exec_builtins(char *name, char **arg, char ***env)
 {
 	if (!(ft_strcmp(name, "cd")))
-		cd(arg, env);
+		cd(arg, *env);
 	if (!(ft_strcmp(name, "echo")))
 		echo(arg);
 	if (!(ft_strcmp(name, "env")))
-		ft_env(arg, env);
+		ft_env(arg, *env);
 	if (!(ft_strcmp(name, "setenv")))
 		ft_setenv(arg, env);
 	if (!(ft_strcmp(name, "unsetenv")))
-		ft_unsetenv(arg, env);
+		ft_unsetenv(arg, *env);
 	if (!(ft_strcmp(name, "exit")))
+	{
+		free(name);
+		ft_tabfree(&arg);
+		ft_tabfree(env);
 		exit(0);
+	}
+	ft_tabfree(&arg);
 	free(name);
-	ft_freestrtab(arg);
-	return(0);//a changer pour retour builtin (tjr ok pour le moment)
+	return (0);
 }
+
 
 void	ft_chdir(char *target, char *oldpwd, char **env)
 {
 	char buf[200];
 
+	ft_bzero(buf, 200);
 	if (!chdir(target))
 	{
 		getcwd(buf, 200);
 		if (get_env(env, "OLDPWD="))
-			ft_strcpy(get_env(env, "OLDPWD="), oldpwd);
+			change_env("OLDPWD=", env, ft_strjoin("OLDPWD=", oldpwd));
 		if (get_env(env, "PWD="))
-			ft_strcpy(get_env(env, "PWD="), buf);
+			change_env("PWD=", env, ft_strjoin("PWD=", buf));
 	}
 	else
-		ft_putstr("File not exist or no access right\n");
+		ft_putstr_fd("File not exist or no access right\n", 2);
 }
 
 void	cd(char **arg, char **env)
@@ -55,7 +62,7 @@ void	cd(char **arg, char **env)
 	while (arg[i])
 		i++;
 	if (i > 2)
-		ft_putstr("Too many arguments\n");
+		ft_putstr_fd("Too many arguments\n", 2);
 	else
 	{
 		if (arg[1] == NULL)
@@ -73,26 +80,24 @@ void	ft_unsetenv(char **arg, char **env)
 	int i;
 
 	ac = 0;
-	i = 0;
+	i = -1;
 	while (arg[ac])
 		ac++;
 	if (ac == 1)
 		ft_ptabstr(env);
 	if (ac == 2 || !ft_strcmp(arg[0], "-u"))
 	{
-		while (env[i])
+		while (env[++i])
 		{
 			if (!ft_strncmp(env[i], arg[1], ft_strlen(arg[1])))
 			{
-				//free(env[i]); bordel dans l'env -> copier l'env au debu
-				//enfaite plutot strcpy quand setenv : pas de malloc env
+				free(env[i]);
 				env[i] = NULL;
 				while (env[++i])
 					env[i - 1] = env[i];
 				env[i - 1] = NULL;
 				break ;
 			}
-			i++;
 		}
 	}
 }

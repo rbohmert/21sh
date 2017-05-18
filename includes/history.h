@@ -23,5 +23,6 @@ void		history_up(t_sh *sh);
 void		history_down(t_sh *sh);
 void		history_add(char *str);
 void		rewrite_history(void);
+int			is_empty_line(char *str);
 
 #endif

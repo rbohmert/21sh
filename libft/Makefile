@@ -25,7 +25,7 @@ SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 	  ft_strncpy.c ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c \
 	  ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c \
 	  ft_strsplit.c ft_itoa.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
-	  ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_lstat.c ft_lstlen.c \
+	  ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_lstat.c ft_lstlen.c ft_tabdup.c\
 	  ft_push_back.c ft_cpush_back.c ft_push_front.c ft_create_elem.c \
 	  get_next_line.c ft_ptabstr.c ft_lstcut.c ft_crea_tree.c ft_lstcat.c\
 	  ft_push_2back.c ft_push_2front.c ft_create_2lst.c ft_freestrtab.c

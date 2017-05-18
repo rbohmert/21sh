@@ -44,7 +44,7 @@ void	change_size(int sig)
 	curs_pos(sh);
 }
 
-char *get_line_tcap(void)
+char *get_line_t(void)
 {
 	t_sh sh;
 	char buf[10];
@@ -65,7 +65,7 @@ char *get_line_tcap(void)
 			if (!ft_strcmp(buf, "\n"))
 			{	
 				restore_term(&sh);
-				history_add(sh.line);
+				is_empty_line(sh.line) ? 0 : history_add(sh.line);
 				(sg_history(NULL))->current = NULL;
 				rewrite_history();
 				ft_putendl_fd(sh.line, pip[1]);
@@ -90,6 +90,42 @@ char *get_line_tcap(void)
 	return (line);
 }	
 
+
+int	ft_strcntc(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while (*str)
+	{
+		if (*str == c)
+			i++;
+		str++;
+	}
+	return (i);
+}
+
+char *get_line_tcap(void)
+{
+	char *line;
+	char *next;
+	char *tmp;
+
+	line = get_line_t();
+	while ((ft_strcntc(line , '"') % 2) != 0)
+	{
+		ft_putstr("->");
+		next = ft_strjoin(line, "\n");
+		free(line);
+		line = next;
+		tmp = line;
+		next = get_line_t();
+		line = ft_strjoin(line, next);
+		free(tmp);
+		free(next);
+	}
+	return (line);
+}
 /*int main(int ac , char **av, char **env)
 {
 	char *line;

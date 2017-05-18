@@ -17,7 +17,8 @@ NAME =	21
 LIB =	libft/libft.a
 
 SRC =	minishell/minishell.c minishell/builtins.c minishell/utils.c\
-		minishell/env.c minishell/setenv.c 21.c line_edit/get_line_tcap.c\
+		minishell/env.c minishell/setenv.c minishell/arg.c minishell/arg2.c \
+		minishell/utils2.c 21.c line_edit/get_line_tcap.c\
 		line_edit/app_key.c line_edit/utils.c line_edit/term_sig.c\
 		line_edit/copypaste.c line_edit/key_actions.c\
 		history/history.c history/utils.c\

@@ -74,7 +74,10 @@ void	paste(t_sh *sh)
 //le curseur
 void	rewrite_line(t_sh *sh)
 {
-	tputs(tgoto(tgetstr("cm", NULL), 2, sh->yfirstl - 1), 1, ptchr);
+	
+	tputs(tgoto(tgetstr("cm", NULL), 0, sh->yfirstl - 1), 1, ptchr);
+	PUT("cd");
+	ft_putstr("?>");
 	ft_putstr(sh->line);
 	ft_putstr("                         ");
 	curs_pos(sh);

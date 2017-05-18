@@ -110,6 +110,7 @@ int main(int ac , char **av, char **env)
 
 	ac = ac;
 	av =av;
+	env = malloc_env(env);
 	sg_env(env); // save env dans une static
 	bzero(tablist, sizeof(t_list *) * 4);
 	block_sig();
@@ -120,7 +121,7 @@ int main(int ac , char **av, char **env)
 		if (isimprchar(line))
 		{
 			//ft_putendl(line);
-			strtrim(&line);
+			strtrim_nocote(&line);
 			lst = lexer(line);
 			//ft_putlist(lst);
 			tre = parser(lst);

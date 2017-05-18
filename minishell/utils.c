@@ -6,35 +6,65 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 18:59:56 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/12/03 21:05:44 by rbohmert         ###   ########.fr       */
+/*   Updated: 2017/05/15 21:27:24 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/21.h"
 
-void	strtrim(char **str)
+void	ft_tabfree(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	if (*arr == NULL)
+		return ;
+	while ((*arr)[i] != NULL)
+	{
+		((*arr)[i]) != NULL ? free((*arr)[i]) : 0;
+		(*arr)[i] = NULL;
+		i++;
+	}
+	((*arr)[i]) != NULL ? free((*arr)[i]) : 0;
+	(*arr)[i] = NULL;
+	*arr != NULL ? free(*arr) : 0;
+	*arr = NULL;
+}
+
+void	stn2(char *str, char *tmp)
+{
+	char *sav2ndcote;
+
+	while (*tmp)
+	{
+		if (*tmp == '"' && (sav2ndcote = ft_strchr(tmp + 1, '"')))
+		{
+			ft_strncpy(str, tmp, sav2ndcote - tmp + 1);
+			str += sav2ndcote - tmp + 1;
+			tmp = sav2ndcote;
+		}
+		else if (*tmp != '\t' && *tmp != '\v' && *tmp != ' ')
+			*(str++) = *tmp;
+		else if (*(tmp + 1) && (*(tmp + 1) != '\t' &&\
+				*(tmp + 1) != '\v' && *(tmp + 1) != ' '))
+			*(str++) = ' ';
+		tmp++;
+	}
+	*str = 0;
+}
+
+void	strtrim_nocote(char **str)
 {
 	char *tmp;
 	char *nstr;
-	char *nstrtmp;
 
 	tmp = *str;
 	nstr = ft_strnew(ft_strlen(tmp) + 1);
-	nstrtmp = nstr;
 	while (*tmp == '\t' || *tmp == '\v' || *tmp == ' ')
 		tmp++;
-	while (*tmp)
-	{
-		if (*tmp != '\t' && *tmp != '\v' && *tmp != ' ')
-			*(nstr++) = *tmp;
-		else if (*(tmp + 1) && (*(tmp + 1) != '\t' &&\
-				*(tmp + 1) != '\v' && *(tmp + 1) != ' '))
-			*(nstr++) = ' ';
-		tmp++;
-	}
-	*nstr = 0;
+	stn2(nstr, tmp);
 	free(*str);
-	*str = nstrtmp;
+	*str = nstr;
 }
 
 int		check_builtins(char *name)
@@ -57,21 +87,6 @@ int		check_builtins(char *name)
 		i++;
 	}
 	return (0);
-}
-
-char	*get_env(char **env, char *key)
-{
-	int i;
-	int len;
-
-	i = -1;
-	len = ft_strlen(key);
-	while (env[++i])
-	{
-		if (ft_strncmp(env[i], key, len) == 0)
-			return (env[i] + len);
-	}
-	return (NULL);
 }
 
 char	*join_path(char *s1, char *s2)
