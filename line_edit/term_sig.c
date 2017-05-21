@@ -14,10 +14,12 @@ int		init_term(t_sh *sh)
 {
 	char *name_term;
 
-	if ((name_term = get_env(sg_env(NULL), "TERM=")) == NULL)
+	name_term = get_env(sg_env(NULL), "TERM=");
+	if (tgetent(NULL, name_term ? name_term : "xterm") == -1)
+	{
+		ft_putstr("tgetent failed");
 		return (0);
-	if (tgetent(NULL, name_term) == -1)
-		return (0);
+	}
 	if (tcgetattr(0, &sh->term) == -1 || tcgetattr(0, &sh->tsav) == -1)
 		return (0);
 	sh->term.c_lflag &= ~(ICANON);

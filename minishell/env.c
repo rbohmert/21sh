@@ -96,13 +96,13 @@ void	ft_env(char **arg, char **env)
 	if (!(nenv = env_opt(arg, env, &i)))
 		return ;
 	if (arg[i] && (com = check(env, arg[i], 1)))
-		exe_com(com, ft_tabdup(arg + i), &nenv, fd, NULL);
+		waitpid(exe_com(com, ft_tabdup(arg + i), &nenv, fd, NULL), 0, 0);
 	else if (!arg[1])
 		ft_ptabstr(nenv);
 	else
 	{
 		ft_putstr("env: ");
-		ft_putstr(arg[i]);
+		arg[i] ? ft_putstr(arg[i]) : 0;
 		ft_putstr(": commande introuvable\n");
 	}
 	ft_tabfree(&nenv);

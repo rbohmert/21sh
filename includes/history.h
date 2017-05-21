@@ -18,11 +18,12 @@ typedef struct	s_elemhst
 }				t_elemhst;
 
 t_history	*get_history(void);
-t_history	*sg_history(t_history *history);
+t_history	*sg_history(t_history *history, int nohistory);
 void		history_up(t_sh *sh);
 void		history_down(t_sh *sh);
 void		history_add(char *str);
 void		rewrite_history(void);
 int			is_empty_line(char *str);
+void		history_print(char **arg);
 
 #endif

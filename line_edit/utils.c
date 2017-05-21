@@ -45,8 +45,7 @@ int		get_curs_y()
 	while (b[0] != 27 && b[1] != 91)// && b[ft_strlen(b) - 1] != 'R')
 	{
 		bzero(b, 15);
-		ft_putchar(27);
-		ft_putstr("[6n");
+		ft_putstr("\x1B[6n");
 		read(0, b, 15);
 	}
 	while (!ft_isdigit(b[++i]))

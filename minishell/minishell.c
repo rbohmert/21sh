@@ -99,7 +99,7 @@ int 	exe_com(char *name, char **arg, char ***env, int fd[3], t_list *toclose)
 	pid_t pid;
 
 	if (name[0] != '/' && name[0] != '.')//verif passé sans path de fichier
-		return (exec_builtins(name, arg, env));//donc builtin
+		return (exec_builtins(name, arg, env, fd, toclose));//donc builtin
 	else
 	{
 		pid = fork();

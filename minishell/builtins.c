@@ -12,8 +12,44 @@
 
 #include "../includes/21.h"
 
-int		exec_builtins(char *name, char **arg, char ***env)
+void	save_change_fd(int (*savfd)[3], int newfd[3])
 {
+	(*savfd)[IN] = dup(STDIN_FILENO);
+	(*savfd)[OUT] = dup(STDOUT_FILENO);
+	(*savfd)[ERR] = dup(STDERR_FILENO);
+	if (newfd[IN] != STDIN_FILENO)
+	{
+		dup2(newfd[IN], STDIN_FILENO);
+		close(newfd[IN]);
+	}
+	if (newfd[OUT] != STDOUT_FILENO)
+	{
+		dup2(newfd[OUT], STDOUT_FILENO);
+		close(newfd[OUT]);
+	}
+	if (newfd[ERR] != STDERR_FILENO)
+	{
+		dup2(newfd[ERR], STDERR_FILENO);
+		close(newfd[ERR]);
+	}
+}
+
+void	restore_fd(int savfd[3])
+{	
+		dup2(savfd[IN], STDIN_FILENO);
+		close(savfd[IN]);
+		dup2(savfd[OUT], STDOUT_FILENO);
+		close(savfd[OUT]);
+		dup2(savfd[ERR], STDERR_FILENO);
+		close(savfd[ERR]);
+}
+
+int		exec_builtins(char *name, char **arg, char ***env, int newfd[3], t_list *toclose)
+{
+	int savfd[3];
+
+	save_change_fd(&savfd, newfd);
+	multiclose(toclose);
 	if (!(ft_strcmp(name, "cd")))
 		cd(arg, *env);
 	if (!(ft_strcmp(name, "echo")))
@@ -24,6 +60,8 @@ int		exec_builtins(char *name, char **arg, char ***env)
 		ft_setenv(arg, env);
 	if (!(ft_strcmp(name, "unsetenv")))
 		ft_unsetenv(arg, *env);
+	if (!(ft_strcmp(name, "history")))
+		history_print(arg);
 	if (!(ft_strcmp(name, "exit")))
 	{
 		free(name);
@@ -31,6 +69,7 @@ int		exec_builtins(char *name, char **arg, char ***env)
 		ft_tabfree(env);
 		exit(0);
 	}
+	restore_fd(savfd);
 	ft_tabfree(&arg);
 	free(name);
 	return (0);

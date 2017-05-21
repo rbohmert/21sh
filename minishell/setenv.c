@@ -73,6 +73,8 @@ void	ft_setenv(char **arg, char ***env)
 		ft_putendl("usage setenv: setnenv VAR VALUE");
 	else
 	{
+		if (!isvalidkey(arg[1]))
+			return ;
 		tmp = ft_strjoin(arg[1], "=");
 		if (!(str = get_env(*env, tmp)))
 			add_env(arg, env, ac);

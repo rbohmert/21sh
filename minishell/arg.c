@@ -19,8 +19,8 @@ int		cnt_arg(char *str)
 	i = 0;
 	while (*str)
 	{
-		if (*str == '"' && ft_strchr(str + 1, '"'))
-			str = ft_strchr(str + 1, '"') + 1;
+			if (*str == '"' || *str == '\'')
+				str = ft_strchr(str + 1, *str) + 1;
 		else if (*str != ' ')
 			str++;
 		else
@@ -40,8 +40,9 @@ int		len_arg(char *str)
 	len = 0;
 	while (*str)
 	{
-		if (*str == '"' && (sav2ndcote = ft_strchr(str + 1, '"')))
+		if (*str == '"' || *str == '\'')
 		{
+			sav2ndcote = ft_strchr(str + 1, *str);
 			len += sav2ndcote - str + 1;
 			str = sav2ndcote + 1;
 		}

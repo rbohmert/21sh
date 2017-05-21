@@ -12,28 +12,50 @@
 
 #include "../includes/21.h"
 
+int		len_varenv(char *str)
+{
+	int i;
+	int len;
+	char	*tmp;
+	char	*var;
+
+	i = 1;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))		
+		i++;
+	var = ft_strndup(str + 1, i - 1);
+	tmp = ft_strjoin(var, "=");
+	free(var);
+	len = (var = get_env(sg_env(NULL), tmp)) ? (int)ft_strlen(var) - i : -i;
+	free(tmp);
+	return (len);
+}
+
 int		new_len(char *str)
 {
 	int		len;
-	int		i;
-	char	*tmp;
-	char	*var;
 
 	len = 0;
 	while (*str)
 	{
-		(*str == '"') ? len-- : 0;
-		if (*str == '$')
+		if (*str == '"')
 		{
-			i = 1;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-				i++;
-			var = ft_strndup(str + 1, i - 1);
-			tmp = ft_strjoin(var, "=");
-			free(var);
-			len += (var = get_env(sg_env(NULL), tmp)) ? (int)ft_strlen(var) - i : -i;
-			free(tmp);
+			while (*(++str) != '"')
+			{
+				if (*str == '$')
+					len += len_varenv(str);
+			//	else
+					len++;
+			}
+			len--;
 		}
+		else if (*str =='\'')
+		{
+			while (*(++str) != '\'')
+				len++;
+			len--;
+		}
+		else if (*str == '$')
+			len += len_varenv(str);
 		str++;
 		len++;
 	}
@@ -66,7 +88,25 @@ void	cpy_arg(char *dst, char *src)
 	while (*src)
 	{
 		if (*src == '"')
+		{
+			while (*(++src) != '"')
+			{
+				if (*src == '$')
+				{
+					expand_var(&dst, &(src));
+					src--;
+				}
+				else
+					*(dst++) = *src;
+			}
 			src++;
+		}
+		else if (*src == '\'')
+		{
+			while (*(++src) != '\'')
+				*(dst++) = *src;
+			src++;
+		}
 		else if (*src == '$')
 			expand_var(&dst, &src);
 		else
@@ -103,6 +143,7 @@ void	expend_arg(char **arg)
 	while (arg[++i])
 	{
 		expand_tild(arg + i);
+//		ft_putnbr(new_len(arg[i]));
 		str = ft_strnew(new_len(arg[i]) + 1);
 		cpy_arg(str, arg[i]);
 		free(arg[i]);

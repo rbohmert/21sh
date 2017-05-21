@@ -39,6 +39,8 @@ char	*get_env(char **env, char *key)
 	int i;
 	int len;
 
+	if (env == NULL || *env == NULL)
+		return (NULL);
 	i = -1;
 	len = ft_strlen(key);
 	while (env[++i])
@@ -47,4 +49,15 @@ char	*get_env(char **env, char *key)
 			return (env[i] + len);
 	}
 	return (NULL);
+}
+
+int		isvalidkey(char *str)
+{
+	while (*str)
+	{
+		if (!ft_isalnum(*str) && *str != '_')
+			return (0);
+		str++;
+	}
+	return (1);
 }

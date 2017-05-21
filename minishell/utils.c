@@ -37,8 +37,9 @@ void	stn2(char *str, char *tmp)
 
 	while (*tmp)
 	{
-		if (*tmp == '"' && (sav2ndcote = ft_strchr(tmp + 1, '"')))
+		if (*tmp == '"' || *tmp == '\'')
 		{
+			sav2ndcote = ft_strchr(tmp + 1, *tmp);
 			ft_strncpy(str, tmp, sav2ndcote - tmp + 1);
 			str += sav2ndcote - tmp + 1;
 			tmp = sav2ndcote;
@@ -69,7 +70,7 @@ void	strtrim_nocote(char **str)
 
 int		check_builtins(char *name)
 {
-	char	*builtins[7];
+	char	*builtins[8];
 	int		i;
 
 	builtins[0] = "echo";
@@ -78,7 +79,8 @@ int		check_builtins(char *name)
 	builtins[3] = "setenv";
 	builtins[4] = "unsetenv";
 	builtins[5] = "exit";
-	builtins[6] = NULL;
+	builtins[6] = "history";
+	builtins[7] = NULL;
 	i = 0;
 	while (builtins[i])
 	{

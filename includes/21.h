@@ -23,7 +23,7 @@
 # define PIP 0b00000100
 # define RED 0b00001000
 # define RFD 0b00010000
-# define CISSYM(c) (c == '<' || c == '>' || c == ';' || c == '|' || c == '&')
+# define CISSYM(c) (*c == '<' || *c == '>' || *c == ';' || *c == '|' || (*c == '&' && *(c + 1) == '&'))
 # define TYPE content_size
 # define ISCHARIMP(c) (c > 31 && c < 127) 
 # define ISSYM(x) (x & SYM)

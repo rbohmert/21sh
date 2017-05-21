@@ -16,8 +16,8 @@ void	history_up(t_sh *sh)
 {
 	t_history *hst;
 
-	hst = sg_history(NULL);
-	if (!hst->lst || (hst->current && !hst->current->next))
+	hst = sg_history(NULL, 0);
+	if (!hst || !hst->lst || (hst->current && !hst->current->next))
 		return;
 	if (!hst->current)
 	{
@@ -41,8 +41,8 @@ void	history_down(t_sh *sh)
 {
 	t_history *hst;
 
-	hst = sg_history(NULL);
-	if (!hst->lst || !hst->current || (hst->current && !hst->current->prev))
+	hst = sg_history(NULL, 0);
+	if (!hst || !hst->lst || !hst->current || (hst->current && !hst->current->prev))
 		return;
 	if (ft_strcmp(((t_elemhst *)(hst->current->content))->line, sh->line))
 		history_add(sh->line);
@@ -59,17 +59,15 @@ void	history_add(char *str)
 	t_history *hst;
 	t_elemhst *elem;
 
-	hst = sg_history(NULL);
+	if ((hst = sg_history(NULL, 0)) == NULL)
+		return;
 	if (hst->current)
 	{
 		free(E(hst->current)->line);
 		E(hst->current)->line = ft_strdup(str);
-				//hst->current = NULL;
 	}
 	else
 	{
-	//	if (is_empty_line(str))
-	//		return ; 
 		if (!(elem = malloc(sizeof(t_elemhst))))
 			return ;
 		elem->line = ft_strdup(str);	
